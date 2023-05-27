@@ -1,14 +1,15 @@
-import { useState } from 'react'
-import './App.css'
+import "./App.css";
+import NavbarComponent from "./components/navbar-component";
+import { useAuth } from "./services/theme/auth-context";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const { createAcc } = useAuth();
   return (
     <>
-      main
+      <NavbarComponent />
+      <button onClick={() => createAcc()}>createAccount</button>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

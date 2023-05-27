@@ -1,0 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lobster&family=Noto+Sans+Chorasmian&family=Roboto:wght@300&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #efeef4;
+  font-family: "Roboto", sans-serif;
+  /* font-family: 'Lobster', cursive; */
+}
