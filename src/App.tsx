@@ -1,13 +1,12 @@
 import "./App.css";
 import NavbarComponent from "./components/navbar-component";
-import { useAuth } from "./services/theme/auth-context";
+import { alertType, useToastContext } from "./services/alert/alert-context";
+import { useAuth } from "./services/auth/auth-context";
 
 function App() {
-  const { createAcc } = useAuth();
   return (
     <>
       <NavbarComponent />
-      <button onClick={() => createAcc()}>createAccount</button>
     </>
   );
 }
