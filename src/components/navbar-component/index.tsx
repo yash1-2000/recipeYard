@@ -4,20 +4,13 @@ import AuthView from "../../views/authview";
 
 function NavbarComponent() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showAuthView, setShowAuthView] = useState(false);
   return (
     <>
       <nav className="relative bg-white shadow z-0">
         <div className="container px-6 py-4 mx-auto">
           <div className="lg:flex lg:items-center lg:justify-between">
             <div className="flex items-center justify-between">
-              <a href="#">
-                <img
-                  className="w-auto h-6 sm:h-7"
-                  src="https://merakiui.com/images/full-logo.svg"
-                  alt=""
-                />
-              </a>
-
               {/* <!-- Mobile menu button --> */}
               <div className="flex lg:hidden">
                 <button
@@ -99,7 +92,9 @@ function NavbarComponent() {
               </div>
 
               <div className="flex items-center mt-4 lg:mt-0">
-                <ButtonComponent>Login</ButtonComponent>
+                <ButtonComponent onClick={() => setShowAuthView(true)}>
+                  Login
+                </ButtonComponent>
                 <ButtonComponent>Log out</ButtonComponent>
 
                 <button
@@ -124,7 +119,9 @@ function NavbarComponent() {
           </div>
         </div>
       </nav>
-      <AuthView />
+      {showAuthView ? (
+        <AuthView closeView={() => setShowAuthView(false)} />
+      ) : null}
     </>
   );
 }

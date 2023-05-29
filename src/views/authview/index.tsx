@@ -2,7 +2,9 @@ import { FunctionComponent, useState, useEffect } from "react";
 import SigninComponent from "../../components/authentication-components/signin-component";
 import SignupComponent from "../../components/authentication-components/signup-component";
 
-const AuthView: FunctionComponent = () => {
+const AuthView: FunctionComponent<{ closeView: () => void }> = ({
+  closeView,
+}) => {
   const [isLogin, setIsLogin] = useState(true);
   useEffect(() => {
     console.log(isLogin);
@@ -19,17 +21,13 @@ const AuthView: FunctionComponent = () => {
     >
       {isLogin ? (
         <SigninComponent
-          setAuthComp={() => {
-            console.log("login");
-            setIsLogin(false);
-          }}
+          closeView={closeView}
+          setAuthComp={() => setIsLogin(false)}
         />
       ) : (
         <SignupComponent
-          setAuthComp={() => {
-            console.log("signup");
-            setIsLogin(true);
-          }}
+          closeView={closeView}
+          setAuthComp={() => setIsLogin(true)}
         />
       )}
     </div>

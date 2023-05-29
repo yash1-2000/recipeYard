@@ -2,10 +2,12 @@ import { FunctionComponent } from "react";
 
 type signupComponentProps = {
   setAuthComp: () => void;
+  closeView: () => void;
 };
 
 const SignupComponent: FunctionComponent<signupComponentProps> = ({
   setAuthComp,
+  closeView,
 }) => {
   return (
     <>
@@ -17,19 +19,17 @@ const SignupComponent: FunctionComponent<signupComponentProps> = ({
           }}
         ></div>
 
-        <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
-          <div className="flex justify-center mx-auto">
-            <img
-              className="w-auto h-7 sm:h-8"
-              src="https://merakiui.com/images/logo.svg"
-              alt=""
-            />
+        <div className="w-full px-6 py-8 md:px-8 lg:w-1/2 relative">
+          <div
+            className="absolute top-0 right-0 m-4 text-lg text-[#000000] cursor-pointer"
+            onClick={closeView}
+          >
+            X
           </div>
-
           <p className="mt-3 text-xl text-center text-secondary_text ">
             Create Account!
           </p>
-
+          <br />
           <div className="flex items-center justify-between mt-4">
             <span className="w-1/5 border-b  lg:w-1/4"></span>
             <p className="text-xs text-center text-gray-500 uppercase  hover:underline">
