@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import ButtonComponent from "../button-component/button-component";
 import AuthView from "../../views/authview";
 
@@ -126,4 +126,4 @@ function NavbarComponent() {
   );
 }
 
-export default NavbarComponent;
+export default memo(NavbarComponent);

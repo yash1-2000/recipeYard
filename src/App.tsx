@@ -5,6 +5,7 @@ import { useAuth } from "./services/auth/auth-context";
 import Profile from "./views/profileview";
 
 function App() {
+  const { createAcc } = useAuth();
   return (
     <>
       <NavbarComponent />
@@ -22,7 +23,8 @@ function App() {
       <br />
       <br />
       <br />
-      <Profile />
+      {/* <Profile /> */}
+      {/* <button onClick={createAcc}>create acc</button> */}
     </>
   );
 }

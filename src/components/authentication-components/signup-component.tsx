@@ -1,4 +1,7 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { signupState } from "../../services/auth/auth-types";
+import { useAuth } from "../../services/auth/auth-context";
 
 type signupComponentProps = {
   setAuthComp: () => void;
@@ -9,6 +12,27 @@ const SignupComponent: FunctionComponent<signupComponentProps> = ({
   setAuthComp,
   closeView,
 }) => {
+  const [refPassword, setRefPassword] = useState<string>("");
+  const [refPassValidation, setRefPassValidation] = useState(false);
+  const { createAcc } = useAuth();
+  const {
+    register,
+    getValues,
+    trigger,
+    formState: { errors, isValid },
+  } = useForm<signupState>();
+
+  const submitSignup = () => {
+    const formValues = getValues();
+    trigger();
+    console.log(getValues(), errors, isValid);
+    if (!isValid || refPassword !== formValues.password) {
+      return setRefPassValidation(() => refPassword !== formValues.password);
+    } else {
+      setRefPassValidation(() => false);
+      createAcc(formValues);
+    }
+  };
   return (
     <>
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg lg:max-w-4xl">
@@ -43,10 +67,22 @@ const SignupComponent: FunctionComponent<signupComponentProps> = ({
               Name
             </label>
             <input
-              id="LoggingEmailAddress"
               className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg  focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
               type="email"
+              {...register("name", {
+                required: "Name is required",
+                validate: {
+                  minLength: (v) =>
+                    v.length <= 30 || "Name must have less than 30 characters",
+                  matchPattern: (v) =>
+                    /^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/.test(v) ||
+                    "Name must be a valid",
+                },
+              })}
             />
+            {errors?.name?.message && (
+              <small className="text-[red]">{errors.name.message}</small>
+            )}
           </div>
 
           <div className="mt-4">
@@ -54,10 +90,20 @@ const SignupComponent: FunctionComponent<signupComponentProps> = ({
               Email Address
             </label>
             <input
-              id="LoggingEmailAddress"
               className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg  focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
               type="email"
+              {...register("email", {
+                required: "Email is required",
+                validate: {
+                  matchPattern: (v) =>
+                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+                    "Email address must be a valid address",
+                },
+              })}
             />
+            {errors?.email?.message && (
+              <small className="text-[red]">{errors.email.message}</small>
+            )}
           </div>
 
           <div className="mt-4">
@@ -69,10 +115,13 @@ const SignupComponent: FunctionComponent<signupComponentProps> = ({
             </div>
 
             <input
-              id="loggingPassword"
               className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg  focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
               type="password"
+              {...register("password", { required: "Password is required" })}
             />
+            {errors?.password?.message && (
+              <small className="text-[red]">{errors.password.message}</small>
+            )}
           </div>
 
           <div className="mt-4">
@@ -84,14 +133,21 @@ const SignupComponent: FunctionComponent<signupComponentProps> = ({
             </div>
 
             <input
-              id="loggingPassword"
               className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg  focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
               type="password"
+              onChange={(e) => setRefPassword(e.target.value)}
             />
+            {refPassValidation && (
+              <small className="text-[red]">Password does not match</small>
+            )}
           </div>
 
           <div className="mt-6">
-            <button className="w-full px-6 py-3 text-sm font-semibold tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-700 rounded-lg hover:bg-gray-300 hover:text-primary_text">
+            <button
+              onClick={() => submitSignup()}
+              // onClick={handleSubmit(onSubmit)}
+              className="w-full px-6 py-3 text-sm font-semibold tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-700 rounded-lg hover:bg-gray-300 hover:text-primary_text"
+            >
               Sign Up
             </button>
           </div>
@@ -105,7 +161,6 @@ const SignupComponent: FunctionComponent<signupComponentProps> = ({
             >
               or log in
             </a>
-
             <span className="w-1/5 border-b md:w-1/4"></span>
           </div>
         </div>

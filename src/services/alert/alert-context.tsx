@@ -28,81 +28,12 @@ type toastStateType = {
   addToasts: (type: alertType, message: string) => void;
 };
 
-const initialState: toasterData[] = [
-//   {
-//     id: "acac",
-//     message: "success message",
-//     type: alertType.success,
-//   },
-//   {
-//     id: "acac",
-//     message: "success message",
-//     type: alertType.success,
-//   },
-//   {
-//     id: "acac",
-//     message: "success message",
-//     type: alertType.success,
-//   },
-//   {
-//     id: "acac",
-//     message: "success message",
-//     type: alertType.success,
-//   },
-//   {
-//     id: "acac",
-//     message: "success message",
-//     type: alertType.success,
-//   },
-//   {
-//     id: "acac",
-//     message: "success message",
-//     type: alertType.success,
-//   },
-//   {
-//     id: "acac",
-//     message: "success message",
-//     type: alertType.success,
-//   },
-//   {
-//     id: "acac",
-//     message: "success message",
-//     type: alertType.success,
-//   },
-//   {
-//     id: "acac",
-//     message: "success message",
-//     type: alertType.success,
-//   },
-//   {
-//     id: "acac",
-//     message: "success message",
-//     type: alertType.success,
-//   },
-];
+const initialState: toasterData[] = [];
 
 export const ToastContext = createContext<toastStateType>({
   toasts: [],
   addToasts: () => {},
 });
-
-// export const toastReducer = (state, action) => {
-//   switch (action.type) {
-//     case ADD:
-//       return [
-//         ...state,
-//         {
-//           id: +new Date(),
-//           message: action.payload.message,
-//           type: action.payload.type,
-//         },
-//       ];
-//     case REMOVE:
-//       return state.filter((t: toasterData) => t.id !== action.payload.id);
-//     default:
-//       return state;
-//   }
-// };
 
 export const ToastProvider: FunctionComponent<{
   children: React.ReactNode;

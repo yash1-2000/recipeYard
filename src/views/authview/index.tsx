@@ -1,4 +1,4 @@
-import { FunctionComponent, useState, useEffect } from "react";
+import { FunctionComponent, useState, useEffect, memo } from "react";
 import SigninComponent from "../../components/authentication-components/signin-component";
 import SignupComponent from "../../components/authentication-components/signup-component";
 
@@ -34,4 +34,4 @@ const AuthView: FunctionComponent<{ closeView: () => void }> = ({
   );
 };
 
-export default AuthView;
+export default memo(AuthView);

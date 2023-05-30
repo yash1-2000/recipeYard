@@ -1,5 +1,8 @@
 import { createContext, FunctionComponent, useContext, useState } from "react";
 import { Client, Account, ID } from "appwrite";
+import { createUser } from "../../api/auth-api";
+import { alertType, useToastContext } from "../alert/alert-context";
+import { signupState } from "./auth-types";
 export enum themeType {
   default = "DEFAULT",
   healthy = "HEALTHY",
@@ -10,7 +13,7 @@ export enum themeType {
 type authContextProps = {
   theme: themeType;
   updateTheme: (val: themeType) => void;
-  createAcc: () => void;
+  createAcc: (data: signupState) => void;
 };
 
 const AuthContext = createContext<authContextProps>({
@@ -19,34 +22,26 @@ const AuthContext = createContext<authContextProps>({
   createAcc: () => {},
 });
 
-const client = new Client()
-  .setEndpoint("https://cloud.appwrite.io/v1") // Your API Endpoint
-  .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID); // Your project ID
-
-const account = new Account(client);
-
-const createAcc = () => {
-  console.log("kklkl");
-  account.create(ID.unique(), "me@example.com", "password", "Jane Doe").then(
-    (response) => {
-      console.log(response);
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
-};
-
 export const AuthDataProvider: FunctionComponent<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const [theme, setTheme] = useState(themeType.default);
+  const { addToasts } = useToastContext();
 
   const updateTheme = (themeType: themeType) => {
     console.log("lll");
     return setTheme(() => themeType);
   };
+  const createAcc = async (data: signupState) => {
+    const result = await createUser(data);
 
+    if (result.state === "failure") {
+      return addToasts(alertType.error, result.message);
+    } else {
+      return addToasts(alertType.success, result.message);
+    }
+    // addToasts()
+  };
   return (
     <AuthContext.Provider value={{ theme, updateTheme, createAcc }}>
       {children}
