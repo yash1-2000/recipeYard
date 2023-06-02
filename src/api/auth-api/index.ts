@@ -1,10 +1,12 @@
-import { ID, Models } from "appwrite";
+import { ID } from "appwrite";
 import { account } from "../backend-config/appwrite-config";
-import { errorInterface, responseInterface, successInterface } from "../api-utils/response-interface";
+import { responseInterface } from "../api-utils/response-interface";
 import { currentUser, loginState, signupState } from "./auth-interface";
 import { responseToUserModel } from "./model";
 
-export const createUser = async (userCreationData: signupState): Promise<responseInterface<undefined>> => {
+export const createUser = async (
+  userCreationData: signupState
+): Promise<responseInterface<undefined>> => {
   try {
     const result = await account.create(
       ID.unique(),
@@ -13,6 +15,7 @@ export const createUser = async (userCreationData: signupState): Promise<respons
       userCreationData.name
     );
     console.log(result);
+
     return {
       state: "success",
       message: "Account created successfully",
@@ -28,12 +31,11 @@ export const createUser = async (userCreationData: signupState): Promise<respons
   }
 };
 
-export const loginUser = async (loginData: loginState): Promise<responseInterface<undefined>> => {
+export const loginUser = async (
+  loginData: loginState
+): Promise<responseInterface<undefined>> => {
   try {
-    await account.createEmailSession(
-      loginData.email,
-      loginData.password,
-    );
+    await account.createEmailSession(loginData.email, loginData.password);
 
     return {
       state: "success",
@@ -50,16 +52,18 @@ export const loginUser = async (loginData: loginState): Promise<responseInterfac
   }
 };
 
-export const checkUserSession = async (): Promise<responseInterface<currentUser>> => {
+export const checkUserSession = async (): Promise<
+  responseInterface<currentUser>
+> => {
   try {
-    const accRs = await account.get()
+    const accRs = await account.get();
     return {
       state: "success",
-      data: responseToUserModel(accRs)
+      data: responseToUserModel(accRs),
     };
   } catch (error) {
     const errorInfo = JSON.parse(JSON.stringify(error));
-    console.log(errorInfo)
+    console.log(errorInfo);
     return {
       state: "failure",
       statusCode: errorInfo.response.code,
@@ -71,9 +75,7 @@ export const checkUserSession = async (): Promise<responseInterface<currentUser>
 
 export const logoutUser = async (): Promise<responseInterface<undefined>> => {
   try {
-    await account.deleteSession(
-      'current'
-    );
+    await account.deleteSession("current");
     return {
       state: "success",
       message: "Logged out successfully",

@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useAuth } from "../../services/auth/auth-context";
 import { signupState } from "../../api/auth-api/auth-interface";
 
@@ -12,6 +12,7 @@ const SignupComponent: FunctionComponent<signupComponentProps> = ({
   setAuthComp,
   closeView,
 }) => {
+  
   const [refPassword, setRefPassword] = useState<string>("");
   const [refPassValidation, setRefPassValidation] = useState(false);
   const { createAcc } = useAuth();

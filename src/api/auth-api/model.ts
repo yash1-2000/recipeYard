@@ -5,6 +5,6 @@ export const responseToUserModel = (responseData: Models.User<Models.Preferences
     return {
         id: responseData.$id,
         name: responseData.name,
-        email: responseData.name,
+        email: responseData.email,
     }
 }
