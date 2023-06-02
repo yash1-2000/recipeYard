@@ -10,4 +10,4 @@ export const account = new Account(client);
 
 //Database
 
-// export const databases = new Databases(client, "62cb05e74e74f14aaea6")
+export const databases = new Databases(client)

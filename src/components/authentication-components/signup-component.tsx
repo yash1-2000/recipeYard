@@ -1,7 +1,7 @@
 import { FunctionComponent, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { signupState } from "../../services/auth/auth-types";
 import { useAuth } from "../../services/auth/auth-context";
+import { signupState } from "../../api/auth-api/auth-interface";
 
 type signupComponentProps = {
   setAuthComp: () => void;
@@ -22,15 +22,15 @@ const SignupComponent: FunctionComponent<signupComponentProps> = ({
     formState: { errors, isValid },
   } = useForm<signupState>();
 
-  const submitSignup = () => {
+  const submitSignup = async () => {
     const formValues = getValues();
     trigger();
-    console.log(getValues(), errors, isValid);
     if (!isValid || refPassword !== formValues.password) {
       return setRefPassValidation(() => refPassword !== formValues.password);
     } else {
       setRefPassValidation(() => false);
-      createAcc(formValues);
+      const signupResult = await createAcc(formValues);
+      if (signupResult) return setAuthComp();
     }
   };
   return (

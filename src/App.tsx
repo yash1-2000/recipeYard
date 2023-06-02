@@ -1,30 +1,25 @@
 import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import NavbarComponent from "./components/navbar-component";
-import { alertType, useToastContext } from "./services/alert/alert-context";
 import { useAuth } from "./services/auth/auth-context";
 import Profile from "./views/profileview";
+import PrivateRoutes from "./views/private-routes";
 
 function App() {
-  const { createAcc } = useAuth();
+
   return (
     <>
-      <NavbarComponent />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      {/* <Profile /> */}
-      {/* <button onClick={createAcc}>create acc</button> */}
+      <Router>
+        <NavbarComponent />
+        <Routes>
+          <Route element={<PrivateRoutes />}>
+            <Route element={<Profile />} path="/profile" />
+            {/* <Route element={<Products />} path="/products" /> */}
+          </Route>
+          {/* <Route element={<Profile />} path="/" /> */}
+          <Route element={<h1>mkcmlkds</h1>} path="/" />
+        </Routes>
+      </Router>
     </>
   );
 }

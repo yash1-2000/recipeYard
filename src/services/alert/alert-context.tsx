@@ -19,13 +19,13 @@ export enum alertType {
 
 export type toasterData = {
   id: string;
-  message: string;
+  message?: string;
   type: alertType;
 };
 
 type toastStateType = {
   toasts: toasterData[];
-  addToasts: (type: alertType, message: string) => void;
+  addToasts: (type: alertType, message?: string) => void;
 };
 
 const initialState: toasterData[] = [];
@@ -41,7 +41,7 @@ export const ToastProvider: FunctionComponent<{
   //   const [toast, toastDispatch] = useReducer(toastReducer, initialState);
   const [toasts, setToasts] = useState<toasterData[]>(initialState);
   //   const toastData: toastStateType[] = { toast, toastDispatch };
-  const addToasts = (type: alertType, message: string): void => {
+  const addToasts = (type: alertType, message?: string): void => {
     const toastId = Date.now().toString();
     setToasts((prev: toasterData[]) => [
       ...prev,

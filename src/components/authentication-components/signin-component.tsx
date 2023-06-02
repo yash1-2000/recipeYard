@@ -1,4 +1,7 @@
 import { FunctionComponent } from "react";
+import { loginState } from "../../services/auth/auth-types";
+import { useAuth } from "../../services/auth/auth-context";
+import { useForm } from "react-hook-form";
 
 type signinComponentProps = {
   setAuthComp: () => void;
@@ -9,6 +12,24 @@ const SigninComponent: FunctionComponent<signinComponentProps> = ({
   setAuthComp,
   closeView,
 }) => {
+  const { loginFunction } = useAuth();
+  const {
+    register,
+    getValues,
+    trigger,
+    formState: { errors, isValid },
+  } = useForm<loginState>();
+
+  const submitLogin = async () => {
+    const formValues = getValues();
+    trigger();
+    if (!isValid) {
+      return
+    } else {
+      const loginResult = await loginFunction(formValues);
+      if (loginResult) return closeView();
+    }
+  };
   return (
     <>
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg lg:max-w-4xl">
@@ -43,10 +64,20 @@ const SigninComponent: FunctionComponent<signinComponentProps> = ({
               Email Address
             </label>
             <input
-              id="LoggingEmailAddress"
               className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg  focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
               type="email"
+              {...register("email", {
+                required: "Email is required",
+                validate: {
+                  matchPattern: (v) =>
+                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+                    "Email address must be a valid address",
+                },
+              })}
             />
+            {errors?.email?.message && (
+              <small className="text-[red]">{errors.email.message}</small>
+            )}
           </div>
 
           <div className="mt-4">
@@ -61,11 +92,17 @@ const SigninComponent: FunctionComponent<signinComponentProps> = ({
               id="loggingPassword"
               className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg  focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
               type="password"
+              {...register("password", {
+                required: "Password is required"
+              })}
             />
+            {errors?.password?.message && (
+              <small className="text-[red]">{errors.password.message}</small>
+            )}
           </div>
 
           <div className="mt-6">
-            <button className="w-full px-6 py-3 text-sm font-semibold tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-700 rounded-lg hover:bg-gray-300 hover:text-primary_text">
+            <button onClick={() => submitLogin()} className="w-full px-6 py-3 text-sm font-semibold tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-700 rounded-lg hover:bg-gray-300 hover:text-primary_text">
               Sign In
             </button>
           </div>
@@ -74,10 +111,7 @@ const SigninComponent: FunctionComponent<signinComponentProps> = ({
             <span className="w-1/5 border-b  md:w-1/4"></span>
 
             <p
-              onClick={() => {
-                console.log("ccd");
-                setAuthComp();
-              }}
+              onClick={() => setAuthComp()}
               className="text-xs text-gray-500 uppercase cursor-pointer"
             >
               or sign up

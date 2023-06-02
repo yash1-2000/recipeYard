@@ -1,49 +1,81 @@
-import { createContext, FunctionComponent, useContext, useState } from "react";
-import { Client, Account, ID } from "appwrite";
-import { createUser } from "../../api/auth-api";
+import { createContext, FunctionComponent, useContext, useState, useEffect } from "react";
+import { checkUserSession, createUser, loginUser, logoutUser } from "../../api/auth-api";
 import { alertType, useToastContext } from "../alert/alert-context";
-import { signupState } from "./auth-types";
-export enum themeType {
-  default = "DEFAULT",
-  healthy = "HEALTHY",
-  fastfood = "FASTFOOD",
-  gourmet = "GOURMET",
-}
+import { currentUser, loginState, signupState } from "../../api/auth-api/auth-interface";
+import { successInterface } from "../../api/api-utils/response-interface";
 
 type authContextProps = {
-  theme: themeType;
-  updateTheme: (val: themeType) => void;
-  createAcc: (data: signupState) => void;
+  createAcc: any
+  loginFunction: any
+  logoutFunction: any
+  currentUser: currentUser | null
 };
 
 const AuthContext = createContext<authContextProps>({
-  theme: themeType.default,
-  updateTheme: () => {},
-  createAcc: () => {},
+  createAcc: () => { },
+  loginFunction: () => { },
+  logoutFunction: () => { },
+  currentUser: null
 });
 
 export const AuthDataProvider: FunctionComponent<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const [theme, setTheme] = useState(themeType.default);
+
+  // const [currentUser, setCurrentUser] = useState<currentUser | null>(null)
+  const [currentUser, setCurrentUser] = useState<currentUser | null>(null)
+
   const { addToasts } = useToastContext();
 
-  const updateTheme = (themeType: themeType) => {
-    console.log("lll");
-    return setTheme(() => themeType);
-  };
-  const createAcc = async (data: signupState) => {
+  const createAcc = async (data: signupState): Promise<boolean> => {
     const result = await createUser(data);
 
     if (result.state === "failure") {
-      return addToasts(alertType.error, result.message);
+      addToasts(alertType.error, result.message);
+      return false
     } else {
-      return addToasts(alertType.success, result.message);
+      addToasts(alertType.success, result.message);
+      return true
     }
-    // addToasts()
   };
+
+  const loginFunction = async (data: loginState): Promise<boolean> => {
+    const result = await loginUser(data);
+
+    if (result.state === "failure") {
+      addToasts(alertType.error, result.message);
+      console.log(result);
+      return false
+    } else {
+      addToasts(alertType.success, result.message);
+      getCurrentUserData();
+      return true
+    }
+  };
+
+  const logoutFunction = async (): Promise<void> => {
+    logoutUser();
+    setCurrentUser(null)
+    return
+  };
+
+  const getCurrentUserData = async (): Promise<void> => {
+    const result = await checkUserSession();
+    if (result.state === "failure") {
+      return
+    } else {
+      if ('data' in result) {
+        setCurrentUser(() => result.data ?? null)
+      }
+      return
+    }
+  }
+
+  useEffect(() => {
+    getCurrentUserData()
+  }, [])
   return (
-    <AuthContext.Provider value={{ theme, updateTheme, createAcc }}>
+    <AuthContext.Provider value={{ createAcc, loginFunction, logoutFunction, currentUser }}>
       {children}
     </AuthContext.Provider>
   );
