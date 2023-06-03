@@ -15,7 +15,7 @@ import {
 import { useAuth } from "../auth/auth-context";
 
 type profileContextProps = {
-  createProfileData: () => Promise<void>;
+  createProfileData: (data: profileData) => Promise<void>;
   getCurrentProfileData: () => Promise<void>;
   editProfileData: (data: profileData) => Promise<boolean>;
   currentProfileData: profileData | null;
@@ -66,9 +66,9 @@ export const ProfileDataProvider: FunctionComponent<{
     }
   };
 
-  const createProfileData = async (): Promise<void> => {
+  const createProfileData = async (data: profileData): Promise<void> => {
     if (currentUser === null) return;
-    const result = await createProfile(currentUser.id);
+    const result = await createProfile(data);
     if (result.state === "failure") {
       addToasts(alertType.error, result.message);
     } else {

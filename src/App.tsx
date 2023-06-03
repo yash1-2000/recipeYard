@@ -1,7 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import NavbarComponent from "./components/navbar-component";
-import { useAuth } from "./services/auth/auth-context";
 import Profile from "./views/profileview";
 import PrivateRoutes from "./views/private-routes";
 

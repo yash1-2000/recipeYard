@@ -1,22 +1,27 @@
 import { ID, Models, Permission, Query, Role } from "appwrite";
 import { databases } from "../backend-config/appwrite-config";
-import { getDefaultProfileData, profileData } from "./profile-interface";
+import {
+  getDefaultProfileData,
+  getDefaultProfileData2,
+  profileData,
+} from "./profile-interface";
 import { responseInterface } from "../api-utils/response-interface";
 import { responseToProfileModel } from "./model";
+import { omit } from "lodash";
 
 export const createProfile = async (
-  userId: string
+  profileDataObj: profileData
 ): Promise<responseInterface<profileData | null>> => {
   try {
     const result = await databases.createDocument(
       import.meta.env.VITE_APPWRITE_DATABASE_ID,
       import.meta.env.VITE_APPWRITE_PROFILE_COLLECTION_ID,
       ID.unique(),
-      getDefaultProfileData(userId),
+      omit(getDefaultProfileData2(profileDataObj), "id"),
       [
         Permission.read(Role.any()),
-        Permission.update(Role.user(userId)),
-        Permission.delete(Role.user(userId)),
+        Permission.update(Role.user(profileDataObj.userId)),
+        Permission.delete(Role.user(profileDataObj.userId)),
       ]
     );
     console.log(result);
@@ -70,7 +75,7 @@ export const updateProfile = async (
       import.meta.env.VITE_APPWRITE_DATABASE_ID,
       import.meta.env.VITE_APPWRITE_PROFILE_COLLECTION_ID,
       profileData.id,
-      profileData
+      omit(getDefaultProfileData2(profileData), "id")
     );
     console.log(result);
     return {

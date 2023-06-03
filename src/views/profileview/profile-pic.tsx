@@ -1,13 +1,38 @@
-import { useState } from "react";
+import { useState, FunctionComponent } from "react";
 import { MdFileUpload } from "react-icons/md";
+import { deleteProfileImage, uploaProfileImage } from "../../api/storage-api";
+import { FunctionBase } from "lodash";
 
-function ProfilePicComp() {
+const ProfilePicComp: FunctionComponent<{
+  handleProfileSubmit: () => void;
+  setValue: any;
+  getValues: any;
+  watch: any;
+}> = ({ handleProfileSubmit, setValue, getValues, watch }) => {
   const [uploadState, setUploadState] = useState(false);
+
+  const profileImg = watch("imageUrl");
+
+  const uploadProfilePicandSaveProfile = async (file: any): Promise<void> => {
+    if (file === null) return;
+    const oldUrl = getValues().imageUrl;
+    const result = await uploaProfileImage(file);
+
+    if (result.state === "success") {
+      if ("data" in result) {
+        setValue("imageUrl", result.data, { shouldDirty: true });
+        await handleProfileSubmit();
+        await deleteProfileImage(oldUrl);
+      }
+    }
+    return;
+  };
+
   return (
     <div
-      className="shadow-xl rounded-full h-auto border-none absolute -m-16 -ml-20 lg:-ml-16 -top-5 w-3/4 aspect-square bg-cover "
+      className="shadow-xl rounded-full h-auto border-none absolute -m-16 -ml-20 lg:-ml-16 -top-5 w-3/4 aspect-square bg-cover bg-[#4b5563]"
       style={{
-        backgroundImage: `url(${"https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1965&q=80"})`,
+        backgroundImage: `url(${profileImg})`,
       }}
       onMouseEnter={() => setUploadState(true)}
       onMouseLeave={() => setUploadState(false)}
@@ -17,12 +42,22 @@ function ProfilePicComp() {
           className="text-6xl text-white rounded-full h-full w-full flex items-center justify-center bg-[#1f202170] cursor-pointer"
           htmlFor="formId"
         >
-          <input name="" type="file" id="formId" hidden />
+          <input
+            name=""
+            type="file"
+            id="formId"
+            hidden
+            onChange={(e) =>
+              uploadProfilePicandSaveProfile(
+                e.target.files ? e.target.files[0] : null
+              )
+            }
+          />
           <MdFileUpload />
         </label>
       ) : null}
     </div>
   );
-}
+};
 
 export default ProfilePicComp;

@@ -1,15 +1,87 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ButtonComponent from "../../components/button-component/button-component";
 import { useProfile } from "../../services/profile/profile-context";
 import ProfilePicComp from "./profile-pic";
+import {
+  profileData,
+  profileFormData,
+} from "../../api/profile-api/profile-interface";
+import { useForm } from "react-hook-form";
+import { useAuth } from "../../services/auth/auth-context";
+import { updateProfile } from "../../api/profile-api";
 
 function Profile() {
-  const { currentProfileData, editProfileData, createProfileData } =
-    useProfile();
+  const {
+    getCurrentProfileData,
+    editProfileData,
+    createProfileData,
+    currentProfileData,
+  } = useProfile();
+  const { currentUser } = useAuth();
 
-  useEffect(() => {
-    console.log(currentProfileData);
-  }, [currentProfileData]);
+  const [profileFormState, setProfileFormState] = useState<profileData | null>(
+    null
+  );
+
+  const getProfileFormData = (): profileFormData => {
+    if (currentProfileData === null) {
+      return {
+        id: "",
+        name: "",
+        imageUrl: "",
+        about: "",
+        email: "",
+        userId: currentUser ? currentUser.id : "",
+        joinedFrom: "",
+        linkedin: "",
+        instagram: "",
+        twitter: "",
+      };
+    } else {
+      return {
+        id: currentProfileData.id,
+        name: currentProfileData.name ?? "",
+        imageUrl: currentProfileData.imageUrl ?? "",
+        about: currentProfileData.about ?? "",
+        email: currentProfileData.email ?? "",
+        userId: currentProfileData.userId,
+        joinedFrom: currentProfileData.joinedFrom ?? "",
+        linkedin: currentProfileData.linkedin ?? "",
+        instagram: currentProfileData.instagram ?? "",
+        twitter: currentProfileData.twitter ?? "",
+      };
+    }
+  };
+
+  const {
+    register,
+    getValues,
+    trigger,
+    setValue,
+    watch,
+    formState: { errors, isValid, isDirty },
+  } = useForm<profileFormData>({ defaultValues: getProfileFormData() });
+
+  const handleProfileSubmit = async () => {
+    const formValues = getValues();
+    console.log(formValues);
+
+    trigger();
+    if (!isValid || !isDirty) {
+      console.log("form invalid");
+    } else {
+      if (currentProfileData === null) {
+        createProfileData(formValues);
+      } else {
+        editProfileData(formValues);
+      }
+      console.log("form is valid");
+    }
+  };
+
+  // useEffect(() => {
+  //   setProfileFormState(profileFormState);
+  // }, [profileFormState]);
 
   return (
     <div>
@@ -21,7 +93,12 @@ function Profile() {
               <div className="flex flex-wrap justify-center">
                 <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                   <div className="relative w-64 max-w-150-px top-0 flex justify-center">
-                    <ProfilePicComp />
+                    <ProfilePicComp
+                      handleProfileSubmit={handleProfileSubmit}
+                      setValue={setValue}
+                      getValues={getValues}
+                      watch={watch}
+                    />
                   </div>
                 </div>
                 <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center"></div>
@@ -31,9 +108,9 @@ function Profile() {
                 <div>
                   <label className="text-secondary_text">Username</label>
                   <input
-                    id="username"
                     type="text"
                     className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
+                    {...register("name")}
                   />
                 </div>
 
@@ -43,6 +120,7 @@ function Profile() {
                     id="emailAddress"
                     type="email"
                     className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
+                    {...register("email")}
                   />
                 </div>
               </div>
@@ -54,6 +132,7 @@ function Profile() {
                     id="username"
                     type="text"
                     className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
+                    {...register("instagram")}
                   />
                 </div>
 
@@ -63,6 +142,7 @@ function Profile() {
                     id="emailAddress"
                     type="email"
                     className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
+                    {...register("linkedin")}
                   />
                 </div>
 
@@ -72,6 +152,7 @@ function Profile() {
                     id="emailAddress"
                     type="email"
                     className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
+                    {...register("twitter")}
                   />
                 </div>
               </div>
@@ -85,20 +166,17 @@ function Profile() {
                     <textarea
                       id="emailAddress"
                       className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
+                      {...register("about")}
                     />
                   </div>
                 </div>
               </div>
               <div className="text-right">
-                {currentProfileData ? (
-                  <ButtonComponent onClick={editProfileData}>
+                {isDirty ? (
+                  <ButtonComponent onClick={handleProfileSubmit}>
                     Update Profile
                   </ButtonComponent>
-                ) : (
-                  <ButtonComponent onClick={createProfileData}>
-                    Create Profile
-                  </ButtonComponent>
-                )}
+                ) : null}
               </div>
               <br />
               <br />
