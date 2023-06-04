@@ -13,22 +13,18 @@ import {
   updateProfile,
 } from "../../api/profile-api";
 import { useAuth } from "../auth/auth-context";
+import { recipeFormData } from "../../api/recipe-api/recipe-interface";
+import { createRecipe } from "../../api/recipe-api";
 
-type profileContextProps = {
-  createProfileData: (data: profileData) => Promise<void>;
-  getCurrentProfileData: () => Promise<void>;
-  editProfileData: (data: profileData) => Promise<boolean>;
-  currentProfileData: profileData | null;
+type recipeContextProps = {
+  addRecipe: (data: recipeFormData) => Promise<void>;
 };
 
-const ProfileContext = createContext<profileContextProps>({
-  createProfileData: async () => {},
-  getCurrentProfileData: async () => {},
-  editProfileData: async () => false,
-  currentProfileData: null,
+const RecipeContext = createContext<recipeContextProps>({
+  addRecipe: async () => {},
 });
 
-export const ProfileDataProvider: FunctionComponent<{
+export const RecipeDataProvider: FunctionComponent<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const [currentProfileData, setCurrentProfileData] =
@@ -63,15 +59,15 @@ export const ProfileDataProvider: FunctionComponent<{
     }
   };
 
-  const createProfileData = async (data: profileData): Promise<void> => {
+  const addRecipe = async (data: recipeFormData): Promise<void> => {
+    console.log("xxxxxxxxxxxxx", currentUser);
     if (currentUser === null) return;
-    const result = await createProfile(data);
+    console.log("lllllllllllllll", currentUser);
+    const result = await createRecipe(data);
     if (result.state === "failure") {
       addToasts(alertType.error, result.message);
     } else {
-      if ("data" in result) {
-        setCurrentProfileData(() => result.data ?? null);
-      }
+      console.log(result);
     }
   };
 
@@ -80,17 +76,14 @@ export const ProfileDataProvider: FunctionComponent<{
   }, [currentUser]);
 
   return (
-    <ProfileContext.Provider
+    <RecipeContext.Provider
       value={{
-        getCurrentProfileData,
-        editProfileData,
-        currentProfileData,
-        createProfileData,
+        addRecipe,
       }}
     >
       {children}
-    </ProfileContext.Provider>
+    </RecipeContext.Provider>
   );
 };
 
-export const useProfile = (): profileContextProps => useContext(ProfileContext);
+export const useRecipe = (): recipeContextProps => useContext(RecipeContext);

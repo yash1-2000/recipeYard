@@ -71,9 +71,9 @@ function Profile() {
       console.log("form invalid");
     } else {
       if (currentProfileData === null) {
-        createProfileData(formValues);
+        await createProfileData(formValues);
       } else {
-        editProfileData(formValues);
+        await editProfileData(formValues);
       }
       console.log("form is valid");
     }

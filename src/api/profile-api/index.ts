@@ -1,7 +1,6 @@
 import { ID, Models, Permission, Query, Role } from "appwrite";
 import { databases } from "../backend-config/appwrite-config";
 import {
-  getDefaultProfileData,
   getDefaultProfileData2,
   profileData,
 } from "./profile-interface";
@@ -24,7 +23,6 @@ export const createProfile = async (
         Permission.delete(Role.user(profileDataObj.userId)),
       ]
     );
-    console.log(result);
     return {
       state: "success",
       data: responseToProfileModel(result),
@@ -44,14 +42,12 @@ export const createProfile = async (
 export const getProfileByUserId = async (
   userId: string
 ): Promise<responseInterface<profileData | null>> => {
-  console.log(userId);
   try {
     const result = await databases.listDocuments(
       import.meta.env.VITE_APPWRITE_DATABASE_ID,
       import.meta.env.VITE_APPWRITE_PROFILE_COLLECTION_ID,
       [Query.equal("userId", [userId])]
     );
-    console.log(result);
     return {
       state: "success",
       data: responseToProfileModel(result.documents[0]),
@@ -77,14 +73,12 @@ export const updateProfile = async (
       profileData.id,
       omit(getDefaultProfileData2(profileData), "id")
     );
-    console.log(result);
     return {
       state: "success",
       data: result,
     };
   } catch (error) {
     const errorInfo = JSON.parse(JSON.stringify(error));
-    console.log(errorInfo);
     return {
       state: "failure",
       statusCode: errorInfo.response.code,

@@ -1,29 +1,45 @@
-import { createContext, FunctionComponent, useContext, useState, useEffect } from "react";
-import { checkUserSession, createUser, loginUser, logoutUser } from "../../api/auth-api";
+import {
+  createContext,
+  FunctionComponent,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
+import {
+  checkUserSession,
+  createUser,
+  loginUser,
+  logoutUser,
+} from "../../api/auth-api";
 import { alertType, useToastContext } from "../alert/alert-context";
-import { currentUser, loginState, signupState } from "../../api/auth-api/auth-interface";
-import { successInterface } from "../../api/api-utils/response-interface";
+import {
+  currentUser,
+  loginState,
+  signupState,
+} from "../../api/auth-api/auth-interface";
 
 type authContextProps = {
-  createAcc: any
-  loginFunction: any
-  logoutFunction: any
-  currentUser: currentUser | null
+  createAcc: any;
+  loginFunction: any;
+  logoutFunction: any;
+  currentUser: currentUser | null;
+  loading: boolean;
 };
 
 const AuthContext = createContext<authContextProps>({
-  createAcc: () => { },
-  loginFunction: () => { },
-  logoutFunction: () => { },
-  currentUser: null
+  createAcc: () => {},
+  loginFunction: () => {},
+  logoutFunction: () => {},
+  currentUser: null,
+  loading: true,
 });
 
 export const AuthDataProvider: FunctionComponent<{
   children: React.ReactNode;
 }> = ({ children }) => {
-
   // const [currentUser, setCurrentUser] = useState<currentUser | null>(null)
-  const [currentUser, setCurrentUser] = useState<currentUser | null>(null)
+  const [currentUser, setCurrentUser] = useState<currentUser | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const { addToasts } = useToastContext();
 
@@ -32,10 +48,10 @@ export const AuthDataProvider: FunctionComponent<{
 
     if (result.state === "failure") {
       addToasts(alertType.error, result.message);
-      return false
+      return false;
     } else {
       addToasts(alertType.success, result.message);
-      return true
+      return true;
     }
   };
 
@@ -44,38 +60,43 @@ export const AuthDataProvider: FunctionComponent<{
 
     if (result.state === "failure") {
       addToasts(alertType.error, result.message);
-      console.log(result);
-      return false
+      return false;
     } else {
       addToasts(alertType.success, result.message);
       getCurrentUserData();
-      return true
+      return true;
     }
   };
 
   const logoutFunction = async (): Promise<void> => {
     logoutUser();
-    setCurrentUser(null)
-    return
+    setCurrentUser(null);
+    return;
   };
 
   const getCurrentUserData = async (): Promise<void> => {
+    console.log("gettingCurrData");
+    setLoading(true);
     const result = await checkUserSession();
     if (result.state === "failure") {
-      return
+      setLoading(false);
+      return;
     } else {
-      if ('data' in result) {
-        setCurrentUser(() => result.data ?? null)
+      if ("data" in result) {
+        setCurrentUser(() => result.data ?? null);
       }
-      return
+      setLoading(false);
+      return;
     }
-  }
+  };
 
   useEffect(() => {
-    getCurrentUserData()
-  }, [])
+    getCurrentUserData();
+  }, []);
   return (
-    <AuthContext.Provider value={{ createAcc, loginFunction, logoutFunction, currentUser }}>
+    <AuthContext.Provider
+      value={{ createAcc, loginFunction, logoutFunction, currentUser, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,11 +1,21 @@
-import { Outlet, Navigate } from 'react-router-dom'
-import { useAuth } from '../../services/auth/auth-context';
+import { useEffect } from "react";
+import { Outlet, Navigate } from "react-router-dom";
+import { useAuth } from "../../services/auth/auth-context";
 
 const PrivateRoutes = () => {
-    const { currentUser } = useAuth();
-    return (
-        currentUser !== null ? <Outlet /> : <Navigate to="/" />
-    )
-}
+  const { currentUser, loading } = useAuth();
 
-export default PrivateRoutes
+  useEffect(() => {
+    console.log(loading);
+  }, [loading]);
+
+  return loading ? (
+    <h1>loading</h1>
+  ) : currentUser !== null ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/" />
+  );
+};
+
+export default PrivateRoutes;

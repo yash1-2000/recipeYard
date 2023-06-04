@@ -14,7 +14,6 @@ export const createUser = async (
       userCreationData.password,
       userCreationData.name
     );
-    console.log(result);
 
     return {
       state: "success",
@@ -63,7 +62,6 @@ export const checkUserSession = async (): Promise<
     };
   } catch (error) {
     const errorInfo = JSON.parse(JSON.stringify(error));
-    console.log(errorInfo);
     return {
       state: "failure",
       statusCode: errorInfo.response.code,

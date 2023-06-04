@@ -1,7 +1,6 @@
 import { useState, FunctionComponent } from "react";
 import { MdFileUpload } from "react-icons/md";
 import { deleteProfileImage, uploaProfileImage } from "../../api/storage-api";
-import { FunctionBase } from "lodash";
 
 const ProfilePicComp: FunctionComponent<{
   handleProfileSubmit: () => void;

@@ -6,6 +6,7 @@ export default {
       colors: {
         primary_text: "#99154B",
         secondary_text: "#6b7280",
+        main_background: "#efeef4",
       },
       fontFamily: {
         default: ["Roboto", "sans-serif"],
