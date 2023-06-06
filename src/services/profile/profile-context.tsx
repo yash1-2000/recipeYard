@@ -65,6 +65,8 @@ export const ProfileDataProvider: FunctionComponent<{
 
   const createProfileData = async (data: profileData): Promise<void> => {
     if (currentUser === null) return;
+    const currDate = new Date();
+    data.joinedFrom = currDate.toISOString();
     const result = await createProfile(data);
     if (result.state === "failure") {
       addToasts(alertType.error, result.message);

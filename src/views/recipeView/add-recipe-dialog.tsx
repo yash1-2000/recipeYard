@@ -7,7 +7,10 @@ import { useForm } from "react-hook-form";
 import { useRecipe } from "../../services/recipes/recipe-context";
 import { deleteRecipeImage, uploaRecipeImage } from "../../api/storage-api";
 
-const getRecipeFormData = (userId: string): recipeFormData => {
+const getRecipeFormData = (
+  userId: string,
+  userName: string
+): recipeFormData => {
   return {
     id: "",
     postedBy: userId,
@@ -21,7 +24,7 @@ const getRecipeFormData = (userId: string): recipeFormData => {
     tags: [],
     reactions: [],
     recipeImg: "",
-    authorName: "",
+    authorName: userName,
     postedAt: "",
     acceptedSuggestion: "",
   };
@@ -42,7 +45,10 @@ export const AddRecipeDialog: FunctionComponent<{
     watch,
     formState: { isValid, isDirty },
   } = useForm<recipeFormData>({
-    defaultValues: getRecipeFormData(currentUser ? currentUser.id : ""),
+    defaultValues: getRecipeFormData(
+      currentUser ? currentUser.id : "",
+      currentUser ? currentUser.name : ""
+    ),
   });
 
   const handleProfileSubmit = async () => {

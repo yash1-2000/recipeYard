@@ -43,29 +43,53 @@ export const createRecipe = async (
   }
 };
 
-// export const getProfileByUserId = async (
-//   userId: string
-// ): Promise<responseInterface<profileData | null>> => {
-//   try {
-//     const result = await databases.listDocuments(
-//       import.meta.env.VITE_APPWRITE_DATABASE_ID,
-//       import.meta.env.VITE_APPWRITE_PROFILE_COLLECTION_ID,
-//       [Query.equal("userId", [userId])]
-//     );
-//     return {
-//       state: "success",
-//       data: responseToProfileModel(result.documents[0]),
-//     };
-//   } catch (error) {
-//     const errorInfo = JSON.parse(JSON.stringify(error));
-//     return {
-//       state: "failure",
-//       statusCode: errorInfo.response.code,
-//       message: errorInfo.response.message,
-//       type: errorInfo.response.type,
-//     };
-//   }
-// };
+export const getRecipesByUserId = async (
+  userId: string
+): Promise<responseInterface<recipeData[] | null>> => {
+  try {
+    const result = await databases.listDocuments(
+      import.meta.env.VITE_APPWRITE_DATABASE_ID,
+      import.meta.env.VITE_APPWRITE_RECIPE_COLLECTION_ID,
+      [Query.equal("postedBy", [userId])]
+    );
+    return {
+      state: "success",
+      data: result.documents.map((data, _) => responseToRecipeModel(data)),
+    };
+  } catch (error) {
+    const errorInfo = JSON.parse(JSON.stringify(error));
+    return {
+      state: "failure",
+      statusCode: errorInfo.response.code,
+      message: errorInfo.response.message,
+      type: errorInfo.response.type,
+    };
+  }
+};
+
+export const getRecipesById = async (
+  recipeId: string
+): Promise<responseInterface<recipeData | null>> => {
+  try {
+    const result = await databases.getDocument(
+      import.meta.env.VITE_APPWRITE_DATABASE_ID,
+      import.meta.env.VITE_APPWRITE_RECIPE_COLLECTION_ID,
+      recipeId
+    );
+    return {
+      state: "success",
+      data: responseToRecipeModel(result),
+    };
+  } catch (error) {
+    const errorInfo = JSON.parse(JSON.stringify(error));
+    return {
+      state: "failure",
+      statusCode: errorInfo.response.code,
+      message: errorInfo.response.message,
+      type: errorInfo.response.type,
+    };
+  }
+};
 
 // export const updateProfile = async (
 //   profileData: profileData
