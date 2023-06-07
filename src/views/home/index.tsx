@@ -8,6 +8,10 @@ export const HomePage: FunctionComponent = () => {
       <Link to="/recipes-view">
         <button>see your recipes</button>
       </Link>
+      <hr />
+      <Link to="/recipes">
+        <button>see all recipes</button>
+      </Link>
 
       <AddRecipe />
     </>

@@ -1,41 +1,44 @@
 import { FunctionComponent, ReactElement, useState } from "react";
 import { MdFileUpload } from "react-icons/md";
 import ButtonComponent from "../../components/button-component/button-component";
-import { recipeFormData } from "../../api/recipe-api/recipe-interface";
+import {
+  recipeData,
+  recipeFormData,
+} from "../../api/recipe-api/recipe-interface";
 import { useAuth } from "../../services/auth/auth-context";
 import { useForm } from "react-hook-form";
 import { useRecipe } from "../../services/recipes/recipe-context";
 import { deleteRecipeImage, uploaRecipeImage } from "../../api/storage-api";
+import { responseInterface } from "../../api/api-utils/response-interface";
 
-const getRecipeFormData = (
-  userId: string,
-  userName: string
-): recipeFormData => {
+const getRecipeFormData = (data: recipeData): recipeFormData => {
   return {
-    id: "",
-    postedBy: userId,
-    title: "",
-    description: "",
-    ingredients: "",
-    steps: "",
-    isEditable: true,
-    isVersion: false,
-    versionOf: "",
-    tags: [],
-    reactions: [],
-    recipeImg: "",
-    authorName: userName,
-    postedAt: "",
-    acceptedSuggestion: "",
+    id: data.id,
+    postedBy: data.postedBy ?? "",
+    title: data.title ?? "",
+    description: data.description ?? "",
+    ingredients: data.ingredients ?? "",
+    steps: data.steps ?? "",
+    isEditable: data.isEditable === null ? true : data.isEditable,
+    isVersion: data.isVersion === null ? false : data.isVersion,
+    versionOf: data.versionOf ?? "",
+    tags: data.tags ?? [],
+    reactions: data.reactions ?? [],
+    recipeImg: data.recipeImg ?? "",
+    authorName: data.authorName ?? "",
+    postedAt: data.postedAt ?? "",
+    acceptedSuggestion: data.acceptedSuggestion ?? "",
   };
 };
 
-export const AddRecipeDialog: FunctionComponent<{
+export const EditRecipeDialog: FunctionComponent<{
   closeDialog: () => void;
-}> = ({ closeDialog }): ReactElement => {
+  getRecipeData: () => void;
+  data: recipeData;
+}> = ({ closeDialog, getRecipeData, data }): ReactElement => {
   const [uploadState, setUploadState] = useState(false);
   const { currentUser } = useAuth();
-  const { addRecipe } = useRecipe();
+  const { editRecipe } = useRecipe();
 
   const {
     register,
@@ -45,10 +48,7 @@ export const AddRecipeDialog: FunctionComponent<{
     watch,
     formState: { isValid, isDirty },
   } = useForm<recipeFormData>({
-    defaultValues: getRecipeFormData(
-      currentUser ? currentUser.id : "",
-      currentUser ? currentUser.name : ""
-    ),
+    defaultValues: getRecipeFormData(data),
   });
 
   const handleProfileSubmit = async () => {
@@ -59,7 +59,8 @@ export const AddRecipeDialog: FunctionComponent<{
     if (!isValid || !isDirty) {
       console.log("form invalid");
     } else {
-      await addRecipe(formValues);
+      await editRecipe(formValues);
+      await getRecipeData();
       closeDialog();
     }
   };
@@ -97,7 +98,7 @@ export const AddRecipeDialog: FunctionComponent<{
       <div className="relative w-[95%] w-full h-[80vh] overflow-auto my-8 bg-white lg:w-[80%]">
         <div
           className="sticky top-0 left-0 text-lg text-[#000000] cursor-pointer text-right p-2"
-          onClick={() => closeDialog()} 
+          onClick={() => closeDialog()}
         >
           X
         </div>
@@ -191,4 +192,4 @@ export const AddRecipeDialog: FunctionComponent<{
     </div>
   );
 };
-export default AddRecipeDialog;
+export default EditRecipeDialog;

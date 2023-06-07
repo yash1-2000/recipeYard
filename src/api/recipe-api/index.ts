@@ -67,6 +67,29 @@ export const getRecipesByUserId = async (
   }
 };
 
+export const getRecipes = async (): Promise<
+  responseInterface<recipeData[] | null>
+> => {
+  try {
+    const result = await databases.listDocuments(
+      import.meta.env.VITE_APPWRITE_DATABASE_ID,
+      import.meta.env.VITE_APPWRITE_RECIPE_COLLECTION_ID
+    );
+    return {
+      state: "success",
+      data: result.documents.map((data, _) => responseToRecipeModel(data)),
+    };
+  } catch (error) {
+    const errorInfo = JSON.parse(JSON.stringify(error));
+    return {
+      state: "failure",
+      statusCode: errorInfo.response.code,
+      message: errorInfo.response.message,
+      type: errorInfo.response.type,
+    };
+  }
+};
+
 export const getRecipesById = async (
   recipeId: string
 ): Promise<responseInterface<recipeData | null>> => {
@@ -91,27 +114,27 @@ export const getRecipesById = async (
   }
 };
 
-// export const updateProfile = async (
-//   profileData: profileData
-// ): Promise<responseInterface<Models.Document>> => {
-//   try {
-//     const result = await databases.updateDocument(
-//       import.meta.env.VITE_APPWRITE_DATABASE_ID,
-//       import.meta.env.VITE_APPWRITE_PROFILE_COLLECTION_ID,
-//       profileData.id,
-//       omit(getDefaultProfileData2(profileData), "id")
-//     );
-//     return {
-//       state: "success",
-//       data: result,
-//     };
-//   } catch (error) {
-//     const errorInfo = JSON.parse(JSON.stringify(error));
-//     return {
-//       state: "failure",
-//       statusCode: errorInfo.response.code,
-//       message: errorInfo.response.message,
-//       type: errorInfo.response.type,
-//     };
-//   }
-// };
+export const updateRecipe = async (
+  data: recipeFormData
+): Promise<responseInterface<Models.Document>> => {
+  try {
+    const result = await databases.updateDocument(
+      import.meta.env.VITE_APPWRITE_DATABASE_ID,
+      import.meta.env.VITE_APPWRITE_RECIPE_COLLECTION_ID,
+      data.id,
+      omit(getRecipeData(data), "id")
+    );
+    return {
+      state: "success",
+      data: result,
+    };
+  } catch (error) {
+    const errorInfo = JSON.parse(JSON.stringify(error));
+    return {
+      state: "failure",
+      statusCode: errorInfo.response.code,
+      message: errorInfo.response.message,
+      type: errorInfo.response.type,
+    };
+  }
+};

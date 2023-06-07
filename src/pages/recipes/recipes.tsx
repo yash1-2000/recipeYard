@@ -3,12 +3,12 @@ import RecipeList from "../../views/recipeView/recipe-list";
 import { useRecipe } from "../../services/recipes/recipe-context";
 import { recipeData } from "../../api/recipe-api/recipe-interface";
 
-export const RecipeListPage: FunctionComponent = () => {
+export const Recipes: FunctionComponent = () => {
   const [recipeList, setRecipeList] = useState<recipeData[] | null>(null);
-  const { getYourRecipesData } = useRecipe();
+  const { getAllRecipes } = useRecipe();
 
   const getRecipeListData = async () => {
-    const result = await getYourRecipesData();
+    const result = await getAllRecipes();
     setRecipeList(result);
   };
 
@@ -18,15 +18,15 @@ export const RecipeListPage: FunctionComponent = () => {
   return (
     <div className="px-4">
       <h2 className="mt-6 text-3xl font-extrabold text-gray-900 md:text-4xl ">
-        Your recipes
+        Browse recipes
       </h2>
       <div className="grid-flow-col gap-4">
         {" "}
         {recipeList ? (
-          <RecipeList recipeList={recipeList} linkUrl="recipes-view-self" />
+          <RecipeList recipeList={recipeList} linkUrl="recipes-view" />
         ) : null}
       </div>
     </div>
   );
 };
-export default RecipeListPage;
+export default Recipes;

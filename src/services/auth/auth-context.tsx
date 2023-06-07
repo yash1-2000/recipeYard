@@ -37,7 +37,6 @@ const AuthContext = createContext<authContextProps>({
 export const AuthDataProvider: FunctionComponent<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  // const [currentUser, setCurrentUser] = useState<currentUser | null>(null)
   const [currentUser, setCurrentUser] = useState<currentUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 

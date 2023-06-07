@@ -4,29 +4,16 @@ import { useRecipe } from "../../services/recipes/recipe-context";
 import CardComponent from "../../components/card-component";
 import { Link } from "react-router-dom";
 
-export const RecipeList: FunctionComponent = () => {
-  const [recipeList, setRecipeList] = useState<recipeData[] | null>(null);
-  const { getYourRecipesData } = useRecipe();
-
-  const getRecipeListData = async () => {
-    const result = await getYourRecipesData();
-    setRecipeList(result);
-  };
-
-  useEffect(() => {
-    getRecipeListData();
-  }, []);
-
+export const RecipeList: FunctionComponent<{
+  recipeList: recipeData[];
+  linkUrl: string;
+}> = ({ recipeList, linkUrl }) => {
   return (
-    <>
-      {recipeList ? (
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 py-4">
-          {recipeList.map((data: recipeData, index: number) => (
-            <CardComponent recipeData={data} key={index} />
-          ))}
-        </div>
-      ) : null}
-    </>
+    <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 py-4">
+      {recipeList.map((data: recipeData, index: number) => (
+        <CardComponent recipeData={data} linkUrl={linkUrl} key={index} />
+      ))}
+    </div>
   );
 };
 export default RecipeList;

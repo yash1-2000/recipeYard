@@ -17,6 +17,7 @@ import { useAuth } from "../auth/auth-context";
 type profileContextProps = {
   createProfileData: (data: profileData) => Promise<void>;
   getCurrentProfileData: () => Promise<void>;
+  getProfile: (userId: string) => Promise<profileData | null>;
   editProfileData: (data: profileData) => Promise<boolean>;
   currentProfileData: profileData | null;
 };
@@ -24,6 +25,7 @@ type profileContextProps = {
 const ProfileContext = createContext<profileContextProps>({
   createProfileData: async () => {},
   getCurrentProfileData: async () => {},
+  getProfile: async () => null,
   editProfileData: async () => false,
   currentProfileData: null,
 });
@@ -49,6 +51,19 @@ export const ProfileDataProvider: FunctionComponent<{
         setCurrentProfileData(() => result.data ?? null);
       }
       return;
+    }
+  };
+
+  const getProfile = async (userId: string): Promise<profileData | null> => {
+    const result = await getProfileByUserId(userId);
+    if (result.state === "failure") {
+      addToasts(alertType.error, result.message);
+      return null;
+    } else {
+      if ("data" in result) {
+        return result.data ?? null;
+      }
+      return null;
     }
   };
 
@@ -85,6 +100,7 @@ export const ProfileDataProvider: FunctionComponent<{
     <ProfileContext.Provider
       value={{
         getCurrentProfileData,
+        getProfile,
         editProfileData,
         currentProfileData,
         createProfileData,
