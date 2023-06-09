@@ -1,7 +1,10 @@
 import { FunctionComponent, ReactElement, useState } from "react";
 import { MdFileUpload } from "react-icons/md";
 import ButtonComponent from "../../components/button-component/button-component";
-import { recipeFormData } from "../../api/recipe-api/recipe-interface";
+import {
+  recipeData,
+  recipeFormData,
+} from "../../api/recipe-api/recipe-interface";
 import { useAuth } from "../../services/auth/auth-context";
 import { useForm } from "react-hook-form";
 import { useRecipe } from "../../services/recipes/recipe-context";
@@ -9,30 +12,52 @@ import { deleteRecipeImage, uploaRecipeImage } from "../../api/storage-api";
 
 const getRecipeFormData = (
   userId: string,
-  userName: string
+  userName: string,
+  recipe?: recipeData
 ): recipeFormData => {
-  return {
-    id: "",
-    postedBy: userId,
-    title: "",
-    description: "",
-    ingredients: "",
-    steps: "",
-    isEditable: true,
-    isVersion: false,
-    versionOf: "",
-    tags: [],
-    reactions: [],
-    recipeImg: "",
-    authorName: userName,
-    postedAt: "",
-    acceptedSuggestion: "",
-  };
+  if (recipe) {
+    return {
+      id: recipe.id,
+      postedBy: userId,
+      title: recipe.title ?? "",
+      description: recipe.description ?? "",
+      ingredients: recipe.ingredients ?? "",
+      steps: recipe.steps ?? "",
+      isEditable: false,
+      isVersion: true,
+      versionOf: recipe.id,
+      tags: [],
+      reactions: [],
+      recipeImg: recipe.recipeImg ?? "",
+      authorName: userName,
+      postedAt: "",
+      acceptedSuggestion: "",
+    };
+  } else {
+    return {
+      id: "",
+      postedBy: userId,
+      title: "",
+      description: "",
+      ingredients: "",
+      steps: "",
+      isEditable: true,
+      isVersion: false,
+      versionOf: "",
+      tags: [],
+      reactions: [],
+      recipeImg: "",
+      authorName: userName,
+      postedAt: "",
+      acceptedSuggestion: "",
+    };
+  }
 };
 
 export const AddRecipeDialog: FunctionComponent<{
   closeDialog: () => void;
-}> = ({ closeDialog }): ReactElement => {
+  recipe: recipeData;
+}> = ({ closeDialog, recipe }): ReactElement => {
   const [uploadState, setUploadState] = useState(false);
   const { currentUser } = useAuth();
   const { addRecipe } = useRecipe();
@@ -47,7 +72,8 @@ export const AddRecipeDialog: FunctionComponent<{
   } = useForm<recipeFormData>({
     defaultValues: getRecipeFormData(
       currentUser ? currentUser.id : "",
-      currentUser ? currentUser.name : ""
+      currentUser ? currentUser.name : "",
+      recipe
     ),
   });
 
@@ -97,7 +123,7 @@ export const AddRecipeDialog: FunctionComponent<{
       <div className="relative w-[95%] w-full h-[80vh] overflow-auto my-8 bg-white lg:w-[80%]">
         <div
           className="sticky top-0 left-0 text-lg text-[#000000] cursor-pointer text-right p-2"
-          onClick={() => closeDialog()} 
+          onClick={() => closeDialog()}
         >
           X
         </div>

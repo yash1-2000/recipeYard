@@ -7,7 +7,7 @@ export const RecipePostView: FunctionComponent<{ data: recipeData }> = ({
 }): ReactElement => {
   return (
     <>
-      <article className="mx-auto w-full format format-sm sm:format-base lg:format-lg bg-white px-4 md:px-12 lg:px-80 pb-12">
+      <article>
         <header className="mb-4 lg:mb-6 not-format">
           <h1 className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl ">
             {data.title}

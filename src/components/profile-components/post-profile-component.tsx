@@ -1,16 +1,22 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useRef, useState } from "react";
 import { profileData } from "../../api/profile-api/profile-interface";
-import { format } from "date-fns";
 import { BsInstagram } from "react-icons/bs";
 import { AiFillLinkedin, AiOutlineTwitter } from "react-icons/ai";
+import ProfilePopupComponent from "./profile-popup";
 
 export const PostProfileComponent: FunctionComponent<{ data: profileData }> = ({
   data,
 }) => {
+  const [showProfilePopup, setShowProfilePopup] = useState(false);
+
   return (
-    <>
-      <div className="mx-auto w-full format format-sm sm:format-base lg:format-lg bg-white px-4 md:px-12 lg:px-80 pb-4 pt-8">
-        <address className="flex items-center mb-6 not-italic">
+    <div
+      className="relative"
+      onMouseEnter={() => setShowProfilePopup(true)}
+      onMouseLeave={() => setShowProfilePopup(false)}
+    >
+      <div>
+        <address className="flex items-center pb-2 not-italic">
           <div className="inline-flex items-center mr-3 text-sm text-gray-900 ">
             <div
               className="w-16 aspect-square rounded-full bg-cover bg-[red] mr-4"
@@ -55,7 +61,8 @@ export const PostProfileComponent: FunctionComponent<{ data: profileData }> = ({
           </div>
         </address>
       </div>
-    </>
+      {showProfilePopup && <ProfilePopupComponent data={data} />}
+    </div>
   );
 };
 export default PostProfileComponent;

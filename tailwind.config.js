@@ -11,6 +11,10 @@ export default {
       fontFamily: {
         default: ["Roboto", "sans-serif"],
         style_heading: ["Lobster", "cursive"],
+        style_heading2: ["Fjalla One", "sans-serif"],
+        style_heading3: ["Lobster Two", "cursive"],
+        style_heading4: ["Philosopher", "sans-serif"],
+        style_heading5: ["Abril Fatface", "cursive"],
       },
     },
   },

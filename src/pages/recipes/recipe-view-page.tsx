@@ -26,9 +26,9 @@ export const RecipeView: FunctionComponent = () => {
     console.log("recipe", recipe);
   }, [recipe]);
   return (
-    <div className="pb-8">
+    <div className="mx-auto w-full format format-sm sm:format-base lg:format-lg bg-white px-4 py-14 md:px-12 lg:px-80 pb-12">
       {recipe && <PostProfileView userId={recipe.postedBy ?? ""} />}
-
+      <br />
       {recipe ? <RecipePostView data={recipe} /> : null}
     </div>
   );

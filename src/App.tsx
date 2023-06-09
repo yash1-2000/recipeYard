@@ -6,8 +6,9 @@ import PrivateRoutes from "./views/private-routes";
 import { HomePage } from "./views/home";
 import RecipeListPage from "./pages/recipes/recipe-list-page.tsx";
 import RecipeViewSelf from "./pages/recipes/recipe-view-self.tsx";
-import RecipeView from "./pages/recipes/recipe-view.tsx";
+import RecipeView from "./pages/recipes/recipe-view-page.tsx";
 import Recipes from "./pages/recipes/recipes.tsx";
+import LandingPage from "./pages/landing/landing-page.tsx";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
             {/* <Route element={<Products />} path="/products" /> */}
           </Route>
           {/* <Route element={<Profile />} path="/" /> */}
-          <Route element={<HomePage />} path="/" />
+          <Route element={<LandingPage />} path="/" />
           <Route element={<RecipeView />} path="/recipes-view/:recipeId" />
           <Route element={<Recipes />} path="/recipes" />
         </Routes>
