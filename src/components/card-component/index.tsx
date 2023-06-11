@@ -2,7 +2,6 @@ import { FunctionComponent, ReactElement } from "react";
 import { recipeData } from "../../api/recipe-api/recipe-interface";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
-// import { FiExternalLink } from "react-icons/fi";
 
 export const CardComponent: FunctionComponent<{
   recipeData: recipeData;
@@ -40,9 +39,11 @@ export const CardComponent: FunctionComponent<{
                   ? format(new Date(recipeData.postedAt), "dd MMM yyyy")
                   : ""}
               </div>
-              {/* <div className="text-xl font-bold text-secondary_text mb-2">
-              <FiExternalLink />
-            </div> */}
+              {recipeData.isVersion && (
+                <span className="bg-purple-100 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 flex items-center justify-center rounded-full">
+                  Version of recipe
+                </span>
+              )}
             </div>
           </div>
         </Link>

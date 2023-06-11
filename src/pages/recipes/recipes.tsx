@@ -9,21 +9,23 @@ export const Recipes: FunctionComponent = () => {
 
   const getRecipeListData = async () => {
     const result = await getAllRecipes();
+    console.log(result)
     setRecipeList(result);
   };
 
   useEffect(() => {
     getRecipeListData();
   }, []);
+
   return (
     <div className="px-4">
       <h2 className="mt-6 text-3xl font-extrabold text-gray-900 md:text-4xl ">
         Browse recipes
       </h2>
-      <div className="grid-flow-col gap-4">
+      <div className="grid-flow-col gap-4 relative">
         {" "}
         {recipeList ? (
-          <RecipeList recipeList={recipeList} linkUrl="recipes-view" />
+          <RecipeList recipeList={recipeList} linkUrl="recipe" />
         ) : null}
       </div>
     </div>

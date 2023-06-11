@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
-import { loginState } from "../../services/auth/auth-types";
 import { useAuth } from "../../services/auth/auth-context";
 import { useForm } from "react-hook-form";
+import { loginState } from "../../api/auth-api/auth-interface";
 
 type signinComponentProps = {
   setAuthComp: () => void;

@@ -1,28 +1,28 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, memo, useEffect, useState } from "react";
 import RecipeList from "../../views/recipeView/recipe-list";
-import { useRecipe } from "../../services/recipes/recipe-context";
-import { recipeData } from "../../api/recipe-api/recipe-interface";
+import {
+  recipeListType,
+  useRecipes,
+} from "../../views/recipeView/hooks/use-recipes";
+import RecipeListPrivateView from "../../views/recipeView/recipe-list-private-view";
 
 export const RecipeListPage: FunctionComponent = () => {
-  const [recipeList, setRecipeList] = useState<recipeData[] | null>(null);
-  const [recipeAllList, setRecipeAllList] = useState<recipeData[] | null>(null);
   const [tabNumber, setTabNumber] = useState("0");
-  const { getYourRecipesData, getAllRecipes } = useRecipe();
 
-  const getRecipeListData = async () => {
-    const result = await getYourRecipesData();
-    setRecipeList(result);
-  };
+  const [search1, setSearch1] = useState("");
+  const [search2, setSearch2] = useState("");
+  const [search3, setSearch3] = useState("");
 
-  const getAllRecipeListData = async () => {
-    const result = await getAllRecipes();
-    setRecipeAllList(result);
-  };
+  const { reciepsList: yourRecipes } = useRecipes(recipeListType.SELF, search1);
+  const { reciepsList: allRecipes } = useRecipes(recipeListType.ALL, search2);
+  const { reciepsList: yourVersions } = useRecipes(
+    recipeListType.VERSIONS,
+    search3
+  );
 
   useEffect(() => {
-    getRecipeListData();
-    getAllRecipeListData();
-  }, []);
+    console.log(search1, search2, search3);
+  }, [search1, search2, search3]);
 
   return (
     <div className="px-4">
@@ -70,28 +70,43 @@ export const RecipeListPage: FunctionComponent = () => {
       {tabNumber === "0" && (
         <div className="grid-flow-col gap-4">
           {" "}
-          {recipeList ? (
-            <RecipeList recipeList={recipeList} linkUrl="recipes-view-self" />
+          {yourRecipes ? (
+            <RecipeListPrivateView
+              recipeList={yourRecipes}
+              linkUrl="recipe-self"
+              tabno="0"
+              setSearch={(value: string) => setSearch1(value)}
+            />
           ) : null}
         </div>
       )}
       {tabNumber === "1" && (
         <div className="grid-flow-col gap-4">
           {" "}
-          {recipeAllList ? (
-            <RecipeList
-              recipeList={recipeAllList}
-              linkUrl="recipes-view-self"
+          {allRecipes ? (
+            <RecipeListPrivateView
+              recipeList={allRecipes}
+              linkUrl="recipe-self"
+              tabno="1"
+              setSearch={(value: string) => setSearch2(value)}
             />
           ) : null}
         </div>
       )}
       {tabNumber === "2" && (
-        <h2 className="mt-6 text-3xl font-extrabold text-gray-900 md:text-4xl ">
-          Your versions
-        </h2>
+        <div className="grid-flow-col gap-4">
+          {" "}
+          {yourVersions ? (
+            <RecipeListPrivateView
+              recipeList={yourVersions}
+              linkUrl="recipe-self"
+              tabno="2"
+              setSearch={(value: string) => setSearch3(value)}
+            />
+          ) : null}
+        </div>
       )}
     </div>
   );
 };
-export default RecipeListPage;
+export default memo(RecipeListPage);

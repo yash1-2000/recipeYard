@@ -4,8 +4,8 @@ import ramen from "../../../public/images/ramenillustration.png";
 
 const Banner: FunctionComponent = () => {
   return (
-    <div className="relative h-screen overflow-hidden px-6 pt-14 lg:px-8">
-      <div className="w-full md:w-full lg:w-3/4 mx-auto py-32 sm:py-48 lg:py-56 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+    <div className="relative h-screen overflow-hidden px-6 pt-14 lg:px-8 " style={{zIndex:'-99'}}>
+      <div className="w-full md:w-full lg:w-3/4 mx-auto py-32 sm:py-48 lg:py-56 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0">
         <div className="lg:w-1/2 mx-auto text-center">
           <h1
             style={{ lineHeight: 1.2 }}
@@ -26,7 +26,6 @@ const Banner: FunctionComponent = () => {
         src={salad}
         alt=""
       />
-      {/* <img className='absolute -top-[50px] -right-[50px] lg:w-[40%] transform -scale-x-100' src={ramen} alt="" /> */}
     </div>
   );
 };

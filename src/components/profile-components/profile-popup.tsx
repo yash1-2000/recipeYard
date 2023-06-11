@@ -27,7 +27,10 @@ export const ProfilePopupComponent: FunctionComponent<{
         </svg>
 
         <h1 className="mx-3 text-lg font-semibold text-white">
-          Cooking since {format(new Date(data.joinedFrom ?? ""), "dd MMM yyyy")}
+          Cooking since{" "}
+          {data.joinedFrom
+            ? format(new Date(data.joinedFrom), "dd MMM yyyy")
+            : ""}
         </h1>
       </div>
 

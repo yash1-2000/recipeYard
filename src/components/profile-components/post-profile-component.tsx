@@ -1,4 +1,4 @@
-import { FunctionComponent, useRef, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import { profileData } from "../../api/profile-api/profile-interface";
 import { BsInstagram } from "react-icons/bs";
 import { AiFillLinkedin, AiOutlineTwitter } from "react-icons/ai";

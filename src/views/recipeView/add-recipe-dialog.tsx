@@ -28,7 +28,7 @@ const getRecipeFormData = (
       versionOf: recipe.id,
       tags: [],
       reactions: [],
-      recipeImg: recipe.recipeImg ?? "",
+      recipeImg: "",
       authorName: userName,
       postedAt: "",
       acceptedSuggestion: "",
@@ -56,7 +56,7 @@ const getRecipeFormData = (
 
 export const AddRecipeDialog: FunctionComponent<{
   closeDialog: () => void;
-  recipe: recipeData;
+  recipe?: recipeData;
 }> = ({ closeDialog, recipe }): ReactElement => {
   const [uploadState, setUploadState] = useState(false);
   const { currentUser } = useAuth();
@@ -187,22 +187,7 @@ export const AddRecipeDialog: FunctionComponent<{
               {...register("steps")}
             />
           </div>
-          <div className="w-full">
-            <p className="text-lg leading-relaxed text-blueGray-700">Tags</p>
-            <textarea className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none" />
-          </div>
-          <div className="flex items-center pl-4 mb-2 border border-gray-200 rounded">
-            <input
-              id="bordered-checkbox-1"
-              type="checkbox"
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-              {...register("isEditable")}
-            />
-            <label className="w-full py-4 ml-2 text-lg leading-relaxed text-blueGray-700">
-              Accept suggestions for this recipe.
-            </label>
-          </div>
-
+          <br />
           <div
             className={`text-right mt-4 ${
               !isDirty ? "pointer-events-none" : ""

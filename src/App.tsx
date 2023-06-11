@@ -5,8 +5,8 @@ import Profile from "./views/profileview";
 import PrivateRoutes from "./views/private-routes";
 import { HomePage } from "./views/home";
 import RecipeListPage from "./pages/recipes/recipe-list-page.tsx";
-import RecipeViewSelf from "./pages/recipes/recipe-view-self.tsx";
-import RecipeView from "./pages/recipes/recipe-view-page.tsx";
+import RecipeViewSelf from "./pages/recipes/authenticated-recipe-view-page.tsx";
+import RecipeView from "./pages/recipes/public-recipe-view-page.tsx";
 import Recipes from "./pages/recipes/recipes.tsx";
 import LandingPage from "./pages/landing/landing-page.tsx";
 
@@ -19,17 +19,17 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route element={<HomePage />} path="/home" />
             <Route element={<Profile />} path="/profile" />
-            <Route element={<RecipeListPage />} path="/recipes-view" />
+            <Route element={<RecipeListPage />} path="/private-recipes-view" />
             <Route
               element={<RecipeViewSelf />}
-              path="/recipes-view-self/:recipeId"
+              path="/recipe-self/:recipeId"
             />
             {/* <Route element={<Products />} path="/products" /> */}
           </Route>
           {/* <Route element={<Profile />} path="/" /> */}
           <Route element={<LandingPage />} path="/" />
-          <Route element={<RecipeView />} path="/recipes-view/:recipeId" />
-          <Route element={<Recipes />} path="/recipes" />
+          <Route element={<RecipeView />} path="/recipe/:recipeId" />
+          <Route element={<Recipes />} path="/public-recipes-view" />
         </Routes>
       </Router>
     </>

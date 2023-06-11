@@ -37,7 +37,6 @@ export const EditRecipeDialog: FunctionComponent<{
   data: recipeData;
 }> = ({ closeDialog, getRecipeData, data }): ReactElement => {
   const [uploadState, setUploadState] = useState(false);
-  const { currentUser } = useAuth();
   const { editRecipe } = useRecipe();
 
   const {

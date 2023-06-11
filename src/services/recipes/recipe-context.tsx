@@ -1,7 +1,5 @@
 import { FunctionComponent, createContext, useContext } from "react";
-import { profileData } from "../../api/profile-api/profile-interface";
 import { alertType, useToastContext } from "../alert/alert-context";
-import { updateProfile } from "../../api/profile-api";
 import { useAuth } from "../auth/auth-context";
 import {
   recipeData,
@@ -18,7 +16,7 @@ import {
 type recipeContextProps = {
   addRecipe: (data: recipeFormData) => Promise<void>;
   getYourRecipesData: () => Promise<recipeData[] | null>;
-  getAllRecipes: () => Promise<recipeData[] | null>;
+  getAllRecipes: (queryArr?: any[]) => Promise<recipeData[] | null>;
   getRecipe: (recipeId: string) => Promise<recipeData | null>;
   editRecipe: (data: recipeFormData) => Promise<void>;
 };
@@ -52,9 +50,10 @@ export const RecipeDataProvider: FunctionComponent<{
     }
   };
 
-  const getAllRecipes = async (): Promise<recipeData[] | null> => {
-    if (currentUser === null) return null;
-    const result = await getRecipes();
+  const getAllRecipes = async (
+    queryArr?: any[]
+  ): Promise<recipeData[] | null> => {
+    const result = await getRecipes(queryArr ?? []);
     if (result.state === "failure") {
       addToasts(alertType.error, result.message);
       return null;

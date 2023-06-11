@@ -1,19 +1,10 @@
-import { FunctionComponent, useState } from "react";
-import AddRecipe from "../recipeView/add-new-recipe";
-import { Link } from "react-router-dom";
+import { FunctionComponent } from "react";
+import RecipeListPage from "../../pages/recipes/recipe-list-page";
 
 export const HomePage: FunctionComponent = () => {
   return (
     <>
-      <Link to="/recipes-view">
-        <button>see your recipes</button>
-      </Link>
-      <hr />
-      <Link to="/recipes">
-        <button>see all recipes</button>
-      </Link>
-
-      <AddRecipe />
+      <RecipeListPage />
     </>
   );
 };

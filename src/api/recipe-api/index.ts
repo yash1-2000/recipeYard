@@ -1,14 +1,7 @@
 import { ID, Models, Permission, Query, Role } from "appwrite";
 import { databases } from "../backend-config/appwrite-config";
-
 import { responseInterface } from "../api-utils/response-interface";
-
 import { omit } from "lodash";
-import {
-  getDefaultProfileData2,
-  profileData,
-} from "../profile-api/profile-interface";
-import { responseToProfileModel } from "../profile-api/model";
 import { getRecipeData, recipeData, recipeFormData } from "./recipe-interface";
 import { responseToRecipeModel } from "./model";
 
@@ -67,13 +60,14 @@ export const getRecipesByUserId = async (
   }
 };
 
-export const getRecipes = async (): Promise<
-  responseInterface<recipeData[] | null>
-> => {
+export const getRecipes = async (
+  queryArray: any[]
+): Promise<responseInterface<recipeData[] | null>> => {
   try {
     const result = await databases.listDocuments(
       import.meta.env.VITE_APPWRITE_DATABASE_ID,
-      import.meta.env.VITE_APPWRITE_RECIPE_COLLECTION_ID
+      import.meta.env.VITE_APPWRITE_RECIPE_COLLECTION_ID,
+      queryArray
     );
     return {
       state: "success",

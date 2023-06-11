@@ -3,6 +3,7 @@ import Banner from "../../views/landing/banner";
 import HoverCardComponent from "../../components/card-component/hover-card";
 import { FiExternalLink } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import VersionCardComponent from "../../components/card-component/version-card";
 
 const LandingPage: FunctionComponent = () => {
   return (
@@ -34,10 +35,11 @@ const LandingPage: FunctionComponent = () => {
       </div>
 
       <Banner />
+
       <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center font-style_heading2">
         Delicious recipes
       </h2>
-      <div className="lg:w-5/6 md:w-5/6 mx-auto px-5 py-2 lg:px-32 lg:pt-8">
+      <div className="lg:w-5/6 md:w-5/6 mx-auto px-5 py-2 lg:px-32 lg:pt-8 relative">
         <div className="-m-1 flex flex-wrap md:-m-2">
           <div className="flex lg:w-1/2 w-full aspect-video flex-wrap">
             <div className="md:w-1/2 w-full p-1 aspect-video md:p-2">
@@ -62,9 +64,10 @@ const LandingPage: FunctionComponent = () => {
             </div>
           </div>
         </div>
-        <Link to="/recipes">
+        <Link to="/public-recipes-view">
           <h6 className="flex gap-4 items-center justify-end py-4 text-lg font-bold cursor-pointer">
-            Seemore <FiExternalLink />
+            See more
+            <FiExternalLink />
           </h6>
         </Link>
       </div>

@@ -1,6 +1,7 @@
 import { FunctionComponent, ReactElement } from "react";
 import { recipeData } from "../../api/recipe-api/recipe-interface";
 import { format } from "date-fns";
+import RecipeVersionsView from "./recipe-versions-view";
 
 export const RecipePostView: FunctionComponent<{ data: recipeData }> = ({
   data,
@@ -13,7 +14,9 @@ export const RecipePostView: FunctionComponent<{ data: recipeData }> = ({
             {data.title}
           </h1>
           <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl">
-            {format(new Date(data.postedAt ?? ""), "dd MMM yyyy")}
+            {data.postedAt
+              ? format(new Date(data.postedAt), "dd MMM yyyy")
+              : ""}
           </p>
         </header>
         <figure
@@ -30,6 +33,8 @@ export const RecipePostView: FunctionComponent<{ data: recipeData }> = ({
         <p className="text-gray-500 whitespace-pre-wrap">{data.ingredients}</p>
         <h5 className="text-xl font-bold my-3">Steps</h5>
         <p className="text-gray-500 whitespace-pre-wrap">{data.steps}</p>
+        <br />
+        <RecipeVersionsView recipeId={data.id} />
       </article>
     </>
   );

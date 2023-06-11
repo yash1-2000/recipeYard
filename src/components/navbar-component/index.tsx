@@ -1,8 +1,8 @@
 import { memo, useState } from "react";
-import ButtonComponent from "../button-component/button-component";
 import AuthView from "../../views/authview";
 import { useAuth } from "../../services/auth/auth-context";
 import { Link } from "react-router-dom";
+import logo from "../../../public/images/logo.png";
 
 function NavbarComponent() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,15 +10,17 @@ function NavbarComponent() {
   const { logoutFunction, currentUser } = useAuth();
   return (
     <>
-      <nav className="relative bg-white shadow z-0">
-        <div className="container px-6 py-4 mx-auto">
+      <nav className="relative bg-white shadow" style={{ zIndex: "99999" }}>
+        <div className=" px-6 py-4 mx-auto">
           <div className="lg:flex lg:items-center lg:justify-between">
             <div className="flex items-center justify-between">
+              <a href="/">
+                <img className="w-auto h-8 lg:h-10" src={logo} alt="" />
+              </a>
               {/* <!-- Mobile menu button --> */}
               <div className="flex lg:hidden">
                 <button
                   onClick={() => setIsOpen((prev) => !prev)}
-                  x-cloak
                   type="button"
                   className="text-gray-500 hover:text-gray-600  focus:outline-none focus:text-gray-600 "
                   aria-label="toggle menu"
@@ -60,67 +62,52 @@ function NavbarComponent() {
 
             {/* <!-- Mobile Menu open: "block", Menu closed: "hidden" --> */}
             <div
-              x-cloak
-              className={`${isOpen
-                ? "translate-x-0 opacity-100 "
-                : "opacity-0 -translate-x-full"
-                } absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center`}
+              className={`${
+                isOpen
+                  ? "translate-x-0 opacity-100 "
+                  : "opacity-0 -translate-x-full"
+              } absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center`}
             >
-              <div className="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8">
-                <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full"
-                >
-                  Join Slack
-                </a>
-                <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full"
-                >
-                  Browse Topics
-                </a>
-                <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full"
-                >
-                  Random Item
-                </a>
-                <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full"
-                >
-                  Experts
-                </a>
-              </div>
+              <div className="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8"></div>
 
-              <div className="flex items-center mt-4 lg:mt-0">
-                {
-                  currentUser === null ? <ButtonComponent onClick={() => setShowAuthView(true)}>
-                    Login
-                  </ButtonComponent> : <>
-                    <ButtonComponent onClick={() => logoutFunction()}>Log out</ButtonComponent>
-
-                    <button
-                      type="button"
-                      className="flex items-center focus:outline-none"
-                      aria-label="toggle profile dropdown"
+              <div className="lg:flex wrap items-center lg:mt-0">
+                {currentUser === null ? (
+                  <>
+                    <p
+                      onClick={() => setShowAuthView(true)}
+                      className="lg:px-4 py-2 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full cursor-pointer"
                     >
-                      <Link to='/profile'> <div className="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full">
-                        <img
-                          src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80"
-                          className="object-cover w-full h-full"
-                          alt="avatar"
-                        />
-                      </div></Link>
-
-
-                      <h3 className="mx-2 text-gray-700  lg:hidden">
-                        {currentUser.name}
-                      </h3>
-                    </button>
+                      Recipes
+                    </p>
+                    <p
+                      onClick={() => setShowAuthView(true)}
+                      className="lg:px-4 py-2 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full cursor-pointer"
+                    >
+                      Login
+                    </p>
                   </>
-                }
+                ) : (
+                  <>
+                    <Link to="/home">
+                      <p className="lg:px-4 py-2 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full">
+                        Home
+                      </p>
+                    </Link>
 
+                    <p
+                      onClick={() => logoutFunction()}
+                      className="py-2 lg:px-4 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full cursor-pointer"
+                    >
+                      Log out
+                    </p>
+
+                    <Link to="/profile">
+                      <p className="lg:px-4 py-2 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full">
+                        Profile
+                      </p>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

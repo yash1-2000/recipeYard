@@ -1,8 +1,6 @@
-import { FunctionComponent, useState, useEffect } from "react";
+import { FunctionComponent } from "react";
 import { recipeData } from "../../api/recipe-api/recipe-interface";
-import { useRecipe } from "../../services/recipes/recipe-context";
 import CardComponent from "../../components/card-component";
-import { Link } from "react-router-dom";
 
 export const RecipeList: FunctionComponent<{
   recipeList: recipeData[];

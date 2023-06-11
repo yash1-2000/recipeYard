@@ -10,14 +10,14 @@ const ButtonComponent: FunctionComponent<buttonComponentProps> = ({
   onClick,
 }) => {
   return (
-    <>
-      <button
-        onClick={onClick}
-        className="px-5 py-2 font-semibold text-sm tracking-wide capitalize transition-colors duration-300 transform bg-[#FFFFFF] text-primary_text rounded-full focus:outline-none"
-      >
-        {children}
-      </button>
-    </>
+    <div
+      className="relative px-6 py-3 font-bold text-black group w-fit cursor-pointer mt-4 md:mt-0"
+      onClick={onClick}
+    >
+      <span className="absolute inset-0 w-full h-full transition duration-300 ease-out transform -translate-x-2 -translate-y-2 bg-red-300 group-hover:translate-x-0 group-hover:translate-y-0"></span>
+      <span className="absolute inset-0 w-full h-full border-4 border-black"></span>
+      <span className="relative">{children}</span>
+    </div>
   );
 };
 
