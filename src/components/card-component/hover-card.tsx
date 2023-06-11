@@ -1,12 +1,15 @@
 import { FunctionComponent, ReactElement, useState } from "react";
+import { recipeData } from "../../api/recipe-api/recipe-interface";
 
-export const HoverCardComponent: FunctionComponent = (): ReactElement => {
+export const HoverCardComponent: FunctionComponent<{ data: recipeData }> = ({
+  data,
+}): ReactElement => {
   const [showInfo, setShowInfo] = useState(false);
   return (
     <div
       className="relative w-full h-full overflow-hidden bg-white rounded-lg shadow-lg bg-cover bg-center bg-[#4b5563] cursor-pointer"
       style={{
-        backgroundImage: `url(https://images.unsplash.com/photo-1542156822-6924d1a71ace?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=6)`,
+        backgroundImage: `url(${data.recipeImg})`,
       }}
       onMouseEnter={() => setShowInfo(true)}
       onMouseLeave={() => setShowInfo(false)}
@@ -18,13 +21,10 @@ export const HoverCardComponent: FunctionComponent = (): ReactElement => {
       >
         <div className="relative text-xl h-full w-full font-bold text-white">
           <h1 className="font-style_heading4 absolute -top-[80px] text-center w-full py-7 bg-gradient-to-t from-[#000000] ">
-            Biryani
+            {data.title ?? ""}
           </h1>
           <div className="h-full w-full font-thin text-sm flex items-center justify-center p-4">
-            <p>
-              ilwind lets you conditionally apply utility classes in different
-              states using variant modifiers. For exam{" "}
-            </p>
+            <p>{data.description ?? ""}</p>
           </div>
         </div>
       </div>

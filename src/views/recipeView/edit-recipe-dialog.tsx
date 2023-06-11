@@ -5,11 +5,9 @@ import {
   recipeData,
   recipeFormData,
 } from "../../api/recipe-api/recipe-interface";
-import { useAuth } from "../../services/auth/auth-context";
 import { useForm } from "react-hook-form";
 import { useRecipe } from "../../services/recipes/recipe-context";
 import { deleteRecipeImage, uploaRecipeImage } from "../../api/storage-api";
-import { responseInterface } from "../../api/api-utils/response-interface";
 
 const getRecipeFormData = (data: recipeData): recipeFormData => {
   return {
@@ -45,7 +43,7 @@ export const EditRecipeDialog: FunctionComponent<{
     trigger,
     setValue,
     watch,
-    formState: { isValid, isDirty },
+    formState: { errors, isValid, isDirty },
   } = useForm<recipeFormData>({
     defaultValues: getRecipeFormData(data),
   });
@@ -133,8 +131,16 @@ export const EditRecipeDialog: FunctionComponent<{
             <p className="text-lg leading-relaxed text-blueGray-700">Title</p>
             <input
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-              {...register("title")}
+              {...register("title", {
+                validate: {
+                  minLength: (v) =>
+                    v.length < 10001 || "Max limit is 1000 characters",
+                },
+              })}
             />
+            {errors?.title?.message && (
+              <small className="text-[red]">{errors.title.message}</small>
+            )}
           </div>
           <div className="w-full">
             <p className="text-lg leading-relaxed text-blueGray-700">
@@ -142,8 +148,16 @@ export const EditRecipeDialog: FunctionComponent<{
             </p>
             <textarea
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-              {...register("description")}
+              {...register("description", {
+                validate: {
+                  minLength: (v) =>
+                    v.length < 5001 || "Max limit is 5000 characters",
+                },
+              })}
             />
+            {errors?.description?.message && (
+              <small className="text-[red]">{errors.description.message}</small>
+            )}
           </div>
           <div className="w-full">
             <p className="text-lg leading-relaxed text-blueGray-700">
@@ -151,30 +165,31 @@ export const EditRecipeDialog: FunctionComponent<{
             </p>
             <textarea
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-              {...register("ingredients")}
+              {...register("ingredients", {
+                validate: {
+                  minLength: (v) =>
+                    v.length < 25001 || "Max limit is 25000 characters",
+                },
+              })}
             />
+            {errors?.ingredients?.message && (
+              <small className="text-[red]">{errors.ingredients.message}</small>
+            )}
           </div>
           <div className="w-full">
             <p className="text-lg leading-relaxed text-blueGray-700">Steps</p>
             <textarea
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-              {...register("steps")}
+              {...register("steps", {
+                validate: {
+                  minLength: (v) =>
+                    v.length < 30001 || "Max limit is 30000 characters",
+                },
+              })}
             />
-          </div>
-          <div className="w-full">
-            <p className="text-lg leading-relaxed text-blueGray-700">Tags</p>
-            <textarea className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none" />
-          </div>
-          <div className="flex items-center pl-4 mb-2 border border-gray-200 rounded">
-            <input
-              id="bordered-checkbox-1"
-              type="checkbox"
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-              {...register("isEditable")}
-            />
-            <label className="w-full py-4 ml-2 text-lg leading-relaxed text-blueGray-700">
-              Accept suggestions for this recipe.
-            </label>
+            {errors?.steps?.message && (
+              <small className="text-[red]">{errors.steps.message}</small>
+            )}
           </div>
 
           <div

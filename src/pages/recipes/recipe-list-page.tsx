@@ -1,5 +1,4 @@
 import { FunctionComponent, memo, useEffect, useState } from "react";
-import RecipeList from "../../views/recipeView/recipe-list";
 import {
   recipeListType,
   useRecipes,

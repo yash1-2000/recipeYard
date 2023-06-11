@@ -1,4 +1,10 @@
-import { FunctionComponent, createContext, useContext } from "react";
+import {
+  FunctionComponent,
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 import { alertType, useToastContext } from "../alert/alert-context";
 import { useAuth } from "../auth/auth-context";
 import {
@@ -12,6 +18,7 @@ import {
   getRecipesByUserId,
   updateRecipe,
 } from "../../api/recipe-api";
+import { Query } from "appwrite";
 
 type recipeContextProps = {
   addRecipe: (data: recipeFormData) => Promise<void>;
@@ -19,6 +26,7 @@ type recipeContextProps = {
   getAllRecipes: (queryArr?: any[]) => Promise<recipeData[] | null>;
   getRecipe: (recipeId: string) => Promise<recipeData | null>;
   editRecipe: (data: recipeFormData) => Promise<void>;
+  displayRecipes: recipeData[] | null;
 };
 
 const RecipeContext = createContext<recipeContextProps>({
@@ -27,11 +35,15 @@ const RecipeContext = createContext<recipeContextProps>({
   getAllRecipes: async () => null,
   getRecipe: async () => null,
   editRecipe: async () => {},
+  displayRecipes: null,
 });
 
 export const RecipeDataProvider: FunctionComponent<{
   children: React.ReactNode;
 }> = ({ children }) => {
+  const [displayRecipes, setDisplayRecipes] = useState<recipeData[] | null>(
+    null
+  );
   const { currentUser } = useAuth();
 
   const { addToasts } = useToastContext();
@@ -101,6 +113,12 @@ export const RecipeDataProvider: FunctionComponent<{
     }
   };
 
+  useEffect(() => {
+    getAllRecipes([Query.limit(6)])
+      .then((result) => setDisplayRecipes(result))
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <RecipeContext.Provider
       value={{
@@ -109,6 +127,7 @@ export const RecipeDataProvider: FunctionComponent<{
         getAllRecipes,
         getRecipe,
         editRecipe,
+        displayRecipes,
       }}
     >
       {children}

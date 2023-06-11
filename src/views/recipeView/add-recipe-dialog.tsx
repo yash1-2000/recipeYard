@@ -68,7 +68,7 @@ export const AddRecipeDialog: FunctionComponent<{
     trigger,
     setValue,
     watch,
-    formState: { isValid, isDirty },
+    formState: { errors, isValid, isDirty },
   } = useForm<recipeFormData>({
     defaultValues: getRecipeFormData(
       currentUser ? currentUser.id : "",
@@ -159,8 +159,16 @@ export const AddRecipeDialog: FunctionComponent<{
             <p className="text-lg leading-relaxed text-blueGray-700">Title</p>
             <input
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-              {...register("title")}
+              {...register("title", {
+                validate: {
+                  minLength: (v) =>
+                    v.length < 11 || "Max limit is 1000 characters",
+                },
+              })}
             />
+            {errors?.title?.message && (
+              <small className="text-[red]">{errors.title.message}</small>
+            )}
           </div>
           <div className="w-full">
             <p className="text-lg leading-relaxed text-blueGray-700">
@@ -168,8 +176,16 @@ export const AddRecipeDialog: FunctionComponent<{
             </p>
             <textarea
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-              {...register("description")}
+              {...register("description", {
+                validate: {
+                  minLength: (v) =>
+                    v.length < 5001 || "Max limit is 5000 characters",
+                },
+              })}
             />
+            {errors?.description?.message && (
+              <small className="text-[red]">{errors.description.message}</small>
+            )}
           </div>
           <div className="w-full">
             <p className="text-lg leading-relaxed text-blueGray-700">
@@ -177,15 +193,31 @@ export const AddRecipeDialog: FunctionComponent<{
             </p>
             <textarea
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-              {...register("ingredients")}
+              {...register("ingredients", {
+                validate: {
+                  minLength: (v) =>
+                    v.length < 25001 || "Max limit is 25000 characters",
+                },
+              })}
             />
+            {errors?.ingredients?.message && (
+              <small className="text-[red]">{errors.ingredients.message}</small>
+            )}
           </div>
           <div className="w-full">
             <p className="text-lg leading-relaxed text-blueGray-700">Steps</p>
             <textarea
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-              {...register("steps")}
+              {...register("steps", {
+                validate: {
+                  minLength: (v) =>
+                    v.length < 30001 || "Max limit is 30000 characters",
+                },
+              })}
             />
+            {errors?.steps?.message && (
+              <small className="text-[red]">{errors.steps.message}</small>
+            )}
           </div>
           <br />
           <div
