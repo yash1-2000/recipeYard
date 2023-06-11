@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import RecipeListPage from "../../pages/recipes/recipe-list-page";
+import RecipeListPage from "../../pages/recipes/private-recipe-list-page";
 
 export const HomePage: FunctionComponent = () => {
   return (

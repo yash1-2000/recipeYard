@@ -162,7 +162,7 @@ export const AddRecipeDialog: FunctionComponent<{
               {...register("title", {
                 validate: {
                   minLength: (v) =>
-                    v.length < 11 || "Max limit is 1000 characters",
+                    v.length < 1001 || "Max limit is 1000 characters",
                 },
               })}
             />

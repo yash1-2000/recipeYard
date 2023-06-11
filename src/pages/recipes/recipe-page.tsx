@@ -48,14 +48,16 @@ export const RecipeViewSelf: FunctionComponent = () => {
             <div className="w-1/2">
               <PostProfileView userId={recipe.postedBy ?? ""} />
             </div>
-            <ButtonComponent
-              onClick={() => handleDialog(recipe.postedBy ?? "")}
-            >
-              {" "}
-              {isMyRecipe(recipe.postedBy ?? "")
-                ? "Edit recipe"
-                : " Cook your own version"}
-            </ButtonComponent>
+            {!isMyRecipe(recipe.postedBy ?? "") && recipe.isVersion ? null : (
+              <ButtonComponent
+                onClick={() => handleDialog(recipe.postedBy ?? "")}
+              >
+                {" "}
+                {isMyRecipe(recipe.postedBy ?? "")
+                  ? "Edit recipe"
+                  : " Cook your own version"}
+              </ButtonComponent>
+            )}
           </div>
 
           <RecipePostView data={recipe} />

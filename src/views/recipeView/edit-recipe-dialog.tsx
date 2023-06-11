@@ -198,7 +198,7 @@ export const EditRecipeDialog: FunctionComponent<{
             }`}
           >
             <ButtonComponent onClick={() => handleProfileSubmit()}>
-              Create
+              Edit
             </ButtonComponent>
           </div>
         </div>

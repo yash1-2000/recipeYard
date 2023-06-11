@@ -4,11 +4,11 @@ import NavbarComponent from "./components/navbar-component";
 import Profile from "./views/profileview";
 import PrivateRoutes from "./views/private-routes";
 import { HomePage } from "./views/home";
-import RecipeListPage from "./pages/recipes/recipe-list-page.tsx";
-import RecipeViewSelf from "./pages/recipes/authenticated-recipe-view-page.tsx";
-import RecipeView from "./pages/recipes/public-recipe-view-page.tsx";
-import Recipes from "./pages/recipes/recipes.tsx";
+import RecipeViewSelf from "./pages/recipes/recipe-page.tsx";
 import LandingPage from "./pages/landing/landing-page.tsx";
+import PrivateRecipeListPage from "./pages/recipes/private-recipe-list-page.tsx";
+import RecipeViewPublic from "./pages/recipes/recipe-page-public.tsx";
+import PublicRecipeListPage from "./pages/recipes/public-recipe-list-page.tsx";
 
 function App() {
   return (
@@ -19,17 +19,18 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route element={<HomePage />} path="/home" />
             <Route element={<Profile />} path="/profile" />
-            <Route element={<RecipeListPage />} path="/private-recipes-view" />
             <Route
-              element={<RecipeViewSelf />}
-              path="/recipe-self/:recipeId"
+              element={<PrivateRecipeListPage />}
+              path="/private-recipes-view"
             />
-            {/* <Route element={<Products />} path="/products" /> */}
+            <Route element={<RecipeViewSelf />} path="/recipe-self/:recipeId" />
           </Route>
-          {/* <Route element={<Profile />} path="/" /> */}
           <Route element={<LandingPage />} path="/" />
-          <Route element={<RecipeView />} path="/recipe/:recipeId" />
-          <Route element={<Recipes />} path="/public-recipes-view" />
+          <Route element={<RecipeViewPublic />} path="/recipe-public/:recipeId" />
+          <Route
+            element={<PublicRecipeListPage />}
+            path="/public-recipes-view"
+          />
         </Routes>
       </Router>
     </>

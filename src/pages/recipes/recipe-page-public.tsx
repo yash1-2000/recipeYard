@@ -6,7 +6,7 @@ import { recipeData } from "../../api/recipe-api/recipe-interface";
 import PostProfileView from "../../views/profileview/post-profile-view";
 import LoaderComponent from "../../components/loader-component";
 
-export const RecipeView: FunctionComponent = () => {
+export const RecipeViewPublic: FunctionComponent = () => {
   const [recipe, setRecipe] = useState<recipeData | null>(null);
 
   const { getRecipe } = useRecipe();
@@ -34,4 +34,4 @@ export const RecipeView: FunctionComponent = () => {
     </>
   );
 };
-export default RecipeView;
+export default RecipeViewPublic;

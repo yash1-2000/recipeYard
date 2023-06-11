@@ -73,12 +73,11 @@ function NavbarComponent() {
               <div className="lg:flex wrap items-center lg:mt-0">
                 {currentUser === null ? (
                   <>
-                    <p
-                      onClick={() => setShowAuthView(true)}
-                      className="lg:px-4 py-2 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full cursor-pointer"
-                    >
-                      Recipes
-                    </p>
+                    <Link to="/public-recipes-view">
+                      <p className="lg:px-4 py-2 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full">
+                        Recipes
+                      </p>
+                    </Link>
                     <p
                       onClick={() => setShowAuthView(true)}
                       className="lg:px-4 py-2 mt-2 text-gray-700 transition-colors duration-300 transform lg:mt-0 hover:bg-gray-100  rounded-full cursor-pointer"

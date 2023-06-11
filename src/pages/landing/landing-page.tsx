@@ -1,8 +1,5 @@
 import { FunctionComponent } from "react";
 import Banner from "../../views/landing/banner";
-import HoverCardComponent from "../../components/card-component/hover-card";
-import { FiExternalLink } from "react-icons/fi";
-import { Link } from "react-router-dom";
 import RecipeGallery from "../../views/landing/recipe-gallery";
 
 const LandingPage: FunctionComponent = () => {

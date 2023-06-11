@@ -2,7 +2,8 @@ import { FunctionComponent, ReactElement, useState } from "react";
 
 export const SearchComponent: FunctionComponent<{
   searchfun: (searchStr: string) => void;
-}> = ({ searchfun }): ReactElement => {
+  value: string;
+}> = ({ searchfun, value }): ReactElement => {
   const [searchText, setSearchText] = useState("");
   return (
     <div>
@@ -14,6 +15,7 @@ export const SearchComponent: FunctionComponent<{
             id="simple-search"
             className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-3 text-lg "
             placeholder="Search"
+            defaultValue={value}
             onChange={(e) => setSearchText(e.target.value)}
             onKeyUp={(e) => {
               e.key === "Enter" ? searchfun(searchText) : null;

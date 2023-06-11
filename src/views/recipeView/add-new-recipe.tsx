@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactElement, useState } from "react";
+import { FunctionComponent, ReactElement, useState, memo } from "react";
 import AddRecipeDialog from "./add-recipe-dialog";
 import ButtonComponent from "../../components/button-component/button-component";
 
@@ -19,4 +19,4 @@ export const AddRecipe: FunctionComponent = (): ReactElement => {
     </>
   );
 };
-export default AddRecipe;
+export default memo(AddRecipe);
