@@ -9,7 +9,7 @@ import { recipeListType } from "../hooks/use-recipes";
 export const RecipeSelfTab: FunctionComponent<{
   linkUrl: string;
 }> = ({ linkUrl }) => {
-  const { selfRecipes, setSearchStringFun, selfRecipesSearchTxt } =
+  const { selfRecipes, setSearchStringFun, selfRecipesSearchTxt} =
     useRecipeDisplayData();
 
   const getSearchStr = (str: string) => {

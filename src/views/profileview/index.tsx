@@ -1,27 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ButtonComponent from "../../components/button-component/button-component";
 import { useProfile } from "../../services/profile/profile-context";
 import ProfilePicComp from "./profile-pic";
-import {
-  profileData,
-  profileFormData,
-} from "../../api/profile-api/profile-interface";
+import { profileFormData } from "../../api/profile-api/profile-interface";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../services/auth/auth-context";
-import { updateProfile } from "../../api/profile-api";
 
 function Profile() {
-  const {
-    getCurrentProfileData,
-    editProfileData,
-    createProfileData,
-    currentProfileData,
-  } = useProfile();
+  const { editProfileData, createProfileData, currentProfileData } =
+    useProfile();
   const { currentUser } = useAuth();
-
-  const [profileFormState, setProfileFormState] = useState<profileData | null>(
-    null
-  );
 
   const getProfileFormData = (): profileFormData => {
     if (currentProfileData === null) {
@@ -59,6 +47,7 @@ function Profile() {
     trigger,
     setValue,
     watch,
+    reset,
     formState: { errors, isValid, isDirty },
   } = useForm<profileFormData>({ defaultValues: getProfileFormData() });
 
@@ -68,20 +57,18 @@ function Profile() {
 
     trigger();
     if (!isValid || !isDirty) {
-      console.log("form invalid");
     } else {
       if (currentProfileData === null) {
         await createProfileData(formValues);
       } else {
         await editProfileData(formValues);
       }
-      console.log("form is valid");
     }
   };
 
-  // useEffect(() => {
-  //   setProfileFormState(profileFormState);
-  // }, [profileFormState]);
+  useEffect(() => {
+    reset(getProfileFormData());
+  }, [currentProfileData]);
 
   return (
     <div>
@@ -110,8 +97,28 @@ function Profile() {
                   <input
                     type="text"
                     className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-                    {...register("name")}
+                    {...register("name", {
+                      validate: {
+                        minLength: (v) => {
+                          if (v === "") return true;
+                          return (
+                            v.length <= 100 ||
+                            "Name must have less than 100 characters"
+                          );
+                        },
+                        matchPattern: (v) => {
+                          if (v === "") return true;
+                          return (
+                            /^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/.test(v) ||
+                            "Name must be valid"
+                          );
+                        },
+                      },
+                    })}
                   />
+                  {errors?.name?.message && (
+                    <small className="text-[red]">{errors.name.message}</small>
+                  )}
                 </div>
 
                 <div>
@@ -120,30 +127,50 @@ function Profile() {
                     id="emailAddress"
                     type="email"
                     className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-                    {...register("email")}
+                    {...register("email", {
+                      validate: {
+                        matchPattern: (v) => {
+                          if (v === "") return true;
+                          return (
+                            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+                              v
+                            ) || "Email address must be a valid address"
+                          );
+                        },
+                      },
+                    })}
                   />
+                  {errors?.email?.message && (
+                    <small className="text-[red]">{errors.email.message}</small>
+                  )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 mt-10">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-10">
                 <div>
                   <label className="text-secondary_text">instagram</label>
                   <input
                     id="username"
                     type="text"
                     className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-                    {...register("instagram")}
+                    {...register("instagram", {
+                      validate: {
+                        matchPattern: (v) => {
+                          if (v === "") return true;
+                          return (
+                            /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(
+                              v
+                            ) || "must be a valid URL"
+                          );
+                        },
+                      },
+                    })}
                   />
-                </div>
-
-                <div>
-                  <label className="text-secondary_text">linkedin</label>
-                  <input
-                    id="emailAddress"
-                    type="email"
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-                    {...register("linkedin")}
-                  />
+                  {errors?.instagram?.message && (
+                    <small className="text-[red]">
+                      {errors.instagram.message}
+                    </small>
+                  )}
                 </div>
 
                 <div>
@@ -152,8 +179,24 @@ function Profile() {
                     id="emailAddress"
                     type="email"
                     className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-                    {...register("twitter")}
+                    {...register("twitter", {
+                      validate: {
+                        matchPattern: (v) => {
+                          if (v === "") return true;
+                          return (
+                            /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(
+                              v
+                            ) || "must be a valid URL"
+                          );
+                        },
+                      },
+                    })}
                   />
+                  {errors?.twitter?.message && (
+                    <small className="text-[red]">
+                      {errors.twitter.message}
+                    </small>
+                  )}
                 </div>
               </div>
 
@@ -166,8 +209,23 @@ function Profile() {
                     <textarea
                       id="emailAddress"
                       className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
-                      {...register("about")}
+                      {...register("about", {
+                        validate: {
+                          minLength: (v) => {
+                            if (v === "") return true;
+                            return (
+                              v.length <= 1001 ||
+                              "Name must have less than 1000 characters"
+                            );
+                          },
+                        },
+                      })}
                     />
+                    {errors?.about?.message && (
+                      <small className="text-[red]">
+                        {errors.about.message}
+                      </small>
+                    )}
                   </div>
                 </div>
               </div>

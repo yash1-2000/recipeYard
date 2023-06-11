@@ -64,14 +64,20 @@ export const RecipeViewSelf: FunctionComponent = () => {
           {showEditRecipeDialog && (
             <EditRecipeDialog
               data={recipe}
-              closeDialog={() => setShowEditRecipeDialog(false)}
+              closeDialog={() => {
+                setShowEditRecipeDialog(false);
+                getRecipeData();
+              }}
               getRecipeData={() => getRecipeData()}
             />
           )}
           {showCreateVersionRecipeDialog && (
             <AddRecipeDialog
               recipe={recipe}
-              closeDialog={() => setShowCreateVersionRecipeDialog(false)}
+              closeDialog={() => {
+                setShowCreateVersionRecipeDialog(false);
+                getRecipeData();
+              }}
             />
           )}
         </div>

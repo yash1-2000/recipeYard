@@ -1,4 +1,10 @@
-import { FunctionComponent, ReactElement, useState } from "react";
+import {
+  FunctionComponent,
+  ReactElement,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { MdFileUpload } from "react-icons/md";
 import ButtonComponent from "../../components/button-component/button-component";
 import {
@@ -34,19 +40,18 @@ export const EditRecipeDialog: FunctionComponent<{
   getRecipeData: () => void;
   data: recipeData;
 }> = ({ closeDialog, getRecipeData, data }): ReactElement => {
+  const submitionStatus = useRef(false);
+
   const [uploadState, setUploadState] = useState(false);
+  const [files, setFiles] = useState<string[]>([]);
   const { editRecipe } = useRecipe();
 
-  const {
-    register,
-    getValues,
-    trigger,
-    setValue,
-    watch,
-    formState: { errors, isValid, isDirty },
-  } = useForm<recipeFormData>({
-    defaultValues: getRecipeFormData(data),
-  });
+  const { register, getValues, trigger, setValue, watch, formState } =
+    useForm<recipeFormData>({
+      defaultValues: getRecipeFormData(data),
+    });
+
+  const { errors, isValid, isDirty } = formState;
 
   const handleProfileSubmit = async () => {
     const formValues = getValues();
@@ -54,10 +59,10 @@ export const EditRecipeDialog: FunctionComponent<{
 
     trigger();
     if (!isValid || !isDirty) {
-      console.log("form invalid");
     } else {
       await editRecipe(formValues);
       await getRecipeData();
+      submitionStatus.current = true;
       closeDialog();
     }
   };
@@ -66,32 +71,43 @@ export const EditRecipeDialog: FunctionComponent<{
 
   const uploadRecipeImg = async (file: any): Promise<void> => {
     if (file === null) return;
-    const oldUrl = getValues().recipeImg;
+    const oldUrl = getValues().recipeImg.slice();
+    setFiles((a) => [...a, oldUrl]);
     const result = await uploaRecipeImage(file);
 
     if (result.state === "success") {
       if ("data" in result && result.data !== undefined) {
         setValue("recipeImg", result.data, { shouldDirty: true });
-        // await handleProfileSubmit();
-        console.log("oldUrl before");
-        await deleteRecipeImage(oldUrl);
-        console.log("oldUrl after");
       }
     }
     return;
   };
 
+  useEffect(() => {
+    return () => {
+      if (submitionStatus.current) {
+        console.log("submitted", files);
+        const aa = files;
+        console.log(aa);
+
+        aa.forEach((url: string) => {
+          deleteRecipeImage(url);
+        });
+      } else {
+        const bb = files;
+        console.log(bb);
+        bb.push(getValues().recipeImg);
+        bb.shift();
+        console.log("not submitted", bb);
+        bb.forEach((url: string) => {
+          deleteRecipeImage(url);
+        });
+      }
+    };
+  }, [isDirty]);
+
   return (
-    <div
-      x-transition:enter="transition duration-300 ease-out"
-      x-transition:enter-start="translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
-      x-transition:enter-end="translate-y-0 opacity-100 sm:scale-100"
-      x-transition:leave="transition duration-150 ease-in"
-      x-transition:leave-start="translate-y-0 opacity-100 sm:scale-100"
-      x-transition:leave-end="translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
-      className="fixed inset-0 z-100 overflow-y-auto grid h-screen place-items-center backdrop-blur-sm backdrop-grayscale bg-[#6f6d6d4f]"
-    >
-      {/* <div className="w-full bg-white lg:max-w-7xl"> */}
+    <div className="fixed inset-0 z-100 overflow-y-auto grid h-screen place-items-center backdrop-blur-sm backdrop-grayscale bg-[#6f6d6d4f]">
       <div className="relative w-[95%] w-full h-[80vh] overflow-auto my-8 bg-white lg:w-[80%]">
         <div
           className="sticky top-0 left-0 text-lg text-[#000000] cursor-pointer text-right p-2"
@@ -191,9 +207,8 @@ export const EditRecipeDialog: FunctionComponent<{
               <small className="text-[red]">{errors.steps.message}</small>
             )}
           </div>
-
           <div
-            className={`text-right mt-4 ${
+            className={`text-right mt-8 ${
               !isDirty ? "pointer-events-none" : ""
             }`}
           >

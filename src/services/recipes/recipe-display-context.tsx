@@ -3,7 +3,6 @@ import {
   createContext,
   useContext,
   useState,
-  useCallback,
   useEffect,
 } from "react";
 import { recipeData } from "../../api/recipe-api/recipe-interface";
@@ -17,10 +16,7 @@ export enum recipeListType {
 }
 
 type recipeDisplayContextProps = {
-  fetchRecipes: (
-    catogary: recipeListType,
-    searchParam: string
-  ) => Promise<void>;
+  fetchRecipes: (catogary: recipeListType) => Promise<void>;
   setSearchStringFun: (catogary: recipeListType, searchParam: string) => void;
   selfRecipes: recipeData[] | null;
   allRecipes: recipeData[] | null;
@@ -58,7 +54,6 @@ export const RecipeDisplayDataProvider: FunctionComponent<{
   const { getAllRecipes } = useRecipe();
 
   const setSearchStringFun = (catogary: recipeListType, str: string) => {
-    console.log(str);
     switch (catogary) {
       case recipeListType.SELF:
         setSelfRecipesSearchTxt(str);
@@ -72,8 +67,11 @@ export const RecipeDisplayDataProvider: FunctionComponent<{
     }
   };
 
-  const fetchRecipes = async (catogary: recipeListType) => {
-    let result;
+  const fetchRecipes = async (
+    catogary: recipeListType,
+    isNewSearch?: boolean
+  ) => {
+    let result: any;
     try {
       switch (catogary) {
         case recipeListType.SELF:
@@ -85,17 +83,30 @@ export const RecipeDisplayDataProvider: FunctionComponent<{
             selfQuery.push(Query.equal("postedBy", [userId]));
           }
           result = await getAllRecipes(selfQuery);
-          console.log(result, selfRecipesSearchTxt);
+
           setSelfRecipes(result);
           return;
+
         case recipeListType.ALL:
-          const allQuery = [Query.search("title", allRecipesSearchTxt)];
+          const allQuery = [
+            Query.limit(50),
+            Query.offset(allRecipes && !isNewSearch ? allRecipes.length : 0),
+            Query.search("title", allRecipesSearchTxt),
+          ];
           if (allRecipesSearchTxt === "") {
             allQuery.pop();
           }
           result = await getAllRecipes(allQuery);
-          setAllRecipes(result);
-          return;
+          if (result === null) return;
+
+          if (allRecipes === null || isNewSearch) {
+            setAllRecipes(result);
+            return;
+          } else {
+            setAllRecipes((prev: any) => [...prev, ...result]);
+            return;
+          }
+
         case recipeListType.VERSIONS:
           const versionQuery = [Query.equal("isVersion", true)];
           if (versionRecipesSearchTxt !== "") {
@@ -114,16 +125,18 @@ export const RecipeDisplayDataProvider: FunctionComponent<{
   };
 
   useEffect(() => {
-    fetchRecipes(recipeListType.SELF);
-    console.log(selfRecipesSearchTxt);
+    fetchRecipes(recipeListType.SELF, true);
+    // setSelfRecipes(null);
   }, [selfRecipesSearchTxt]);
 
   useEffect(() => {
-    fetchRecipes(recipeListType.ALL);
+    fetchRecipes(recipeListType.ALL, true);
+    // setAllRecipes(null);
   }, [allRecipesSearchTxt]);
 
   useEffect(() => {
-    fetchRecipes(recipeListType.VERSIONS);
+    fetchRecipes(recipeListType.VERSIONS, true);
+    // setVersionRecipes(null);
   }, [versionRecipesSearchTxt]);
 
   return (

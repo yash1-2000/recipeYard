@@ -5,11 +5,12 @@ import { recipeData } from "../../../api/recipe-api/recipe-interface";
 import { useRecipeDisplayData } from "../../../services/recipes/recipe-display-context";
 import LoaderComponent from "../../../components/loader-component";
 import { recipeListType } from "../hooks/use-recipes";
+import ButtonComponent from "../../../components/button-component/button-component";
 
 export const RecipeAllTab: FunctionComponent<{
   linkUrl: string;
 }> = ({ linkUrl }) => {
-  const { allRecipes, setSearchStringFun, allRecipesSearchTxt } =
+  const { allRecipes, setSearchStringFun, allRecipesSearchTxt, fetchRecipes } =
     useRecipeDisplayData();
 
   const getSearchStr = (str: string) => {
@@ -35,6 +36,15 @@ export const RecipeAllTab: FunctionComponent<{
               ))}
             </div>
           </div>
+          <br />
+
+          <div className="flex justify-center my-4">
+            <ButtonComponent onClick={() => fetchRecipes(recipeListType.ALL)}>
+              Load more
+            </ButtonComponent>
+          </div>
+
+          <br />
         </div>
       ) : (
         <LoaderComponent />

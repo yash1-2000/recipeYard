@@ -8,7 +8,7 @@ export const createUser = async (
   userCreationData: signupState
 ): Promise<responseInterface<undefined>> => {
   try {
-    const result = await account.create(
+    await account.create(
       ID.unique(),
       userCreationData.email,
       userCreationData.password,

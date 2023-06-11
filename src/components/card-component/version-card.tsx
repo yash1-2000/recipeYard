@@ -2,7 +2,6 @@ import { FunctionComponent, ReactElement } from "react";
 import { recipeData } from "../../api/recipe-api/recipe-interface";
 import { format } from "date-fns";
 import { useAuth } from "../../services/auth/auth-context";
-import { Link } from "react-router-dom";
 
 export const VersionCardComponent: FunctionComponent<{ data: recipeData }> = ({
   data,
@@ -25,20 +24,21 @@ export const VersionCardComponent: FunctionComponent<{ data: recipeData }> = ({
       </div>
 
       <div className="flex items-center justify-between mt-4">
-        <Link
-          to={`${
+        <a
+          href={`${
             currentUser === null
-              ? "/recipe/" + data.id
+              ? "/recipe-public/" + data.id
               : "/recipe-self/" + data.id
           }`}
+          target="blank"
         >
           <p className="text-blue-600 hover:underline">Read more</p>
-        </Link>
+        </a>
 
         <div className="flex items-center">
-          <a className="font-bold text-gray-700 cursor-pointer" role="link">
+          <p className="font-bold text-gray-700 cursor-pointer" role="link">
             {data.authorName ?? ""}
-          </a>
+          </p>
         </div>
       </div>
     </div>

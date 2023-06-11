@@ -1,4 +1,10 @@
-import { FunctionComponent, ReactElement, useState } from "react";
+import {
+  FunctionComponent,
+  ReactElement,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import { MdFileUpload } from "react-icons/md";
 import ButtonComponent from "../../components/button-component/button-component";
 import {
@@ -9,6 +15,8 @@ import { useAuth } from "../../services/auth/auth-context";
 import { useForm } from "react-hook-form";
 import { useRecipe } from "../../services/recipes/recipe-context";
 import { deleteRecipeImage, uploaRecipeImage } from "../../api/storage-api";
+import { useRecipeDisplayData } from "../../services/recipes/recipe-display-context";
+import { recipeListType } from "./hooks/use-recipes";
 
 const getRecipeFormData = (
   userId: string,
@@ -58,9 +66,12 @@ export const AddRecipeDialog: FunctionComponent<{
   closeDialog: () => void;
   recipe?: recipeData;
 }> = ({ closeDialog, recipe }): ReactElement => {
+  const submitionStatus = useRef(false);
   const [uploadState, setUploadState] = useState(false);
+  const [files, setFiles] = useState<string[]>([]);
   const { currentUser } = useAuth();
   const { addRecipe } = useRecipe();
+  const { fetchRecipes } = useRecipeDisplayData();
 
   const {
     register,
@@ -86,6 +97,7 @@ export const AddRecipeDialog: FunctionComponent<{
       console.log("form invalid");
     } else {
       await addRecipe(formValues);
+      submitionStatus.current = true;
       closeDialog();
     }
   };
@@ -94,30 +106,46 @@ export const AddRecipeDialog: FunctionComponent<{
 
   const uploadRecipeImg = async (file: any): Promise<void> => {
     if (file === null) return;
-    const oldUrl = getValues().recipeImg;
+    const oldUrl = getValues().recipeImg.slice();
+    setFiles((a) => [...a, oldUrl]);
     const result = await uploaRecipeImage(file);
 
     if (result.state === "success") {
       if ("data" in result && result.data !== undefined) {
         setValue("recipeImg", result.data, { shouldDirty: true });
-        // await handleProfileSubmit();
-        console.log("oldUrl before");
-        await deleteRecipeImage(oldUrl);
-        console.log("oldUrl after");
       }
     }
     return;
   };
 
+  useEffect(() => {
+    return () => {
+      if (submitionStatus.current) {
+        console.log("submitted", files);
+        const aa = files;
+        console.log(aa);
+
+        aa.forEach((url: string) => {
+          deleteRecipeImage(url);
+        });
+        fetchRecipes(recipeListType.SELF);
+      } else {
+        const bb = files;
+        console.log(bb);
+        bb.push(getValues().recipeImg);
+        bb.shift();
+        console.log("not submitted", bb);
+        bb.forEach((url: string) => {
+          deleteRecipeImage(url);
+        });
+      }
+    };
+  }, [isDirty]);
+
   return (
     <div
-      x-transition:enter="transition duration-300 ease-out"
-      x-transition:enter-start="translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
-      x-transition:enter-end="translate-y-0 opacity-100 sm:scale-100"
-      x-transition:leave="transition duration-150 ease-in"
-      x-transition:leave-start="translate-y-0 opacity-100 sm:scale-100"
-      x-transition:leave-end="translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
-      className="fixed inset-0 z-100 overflow-y-auto grid h-screen place-items-center backdrop-blur-sm backdrop-grayscale bg-[#6f6d6d4f]"
+      className="fixed inset-0 z-100 overflow-y-auto grid h-screen place-items-center backdrop-blur-sm backdrop-grayscale bg-[#6f6d6d4f] "
+      style={{ zIndex: "99" }}
     >
       {/* <div className="w-full bg-white lg:max-w-7xl"> */}
       <div className="relative w-[95%] w-full h-[80vh] overflow-auto my-8 bg-white lg:w-[80%]">

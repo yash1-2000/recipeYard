@@ -19,7 +19,7 @@ export const Tabscomponent: FunctionComponent<{
           onChange={(e) => onChange(e.target.value)}
         >
           {tabsList.map((tabName, index) => (
-            <option value={index}>{tabName}</option>
+            <option value={index} key={index}>{tabName}</option>
           ))}
         </select>
       </div>

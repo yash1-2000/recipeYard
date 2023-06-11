@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "../../services/auth/auth-context";
+import LoaderComponent from "../../components/loader-component";
 
 const PrivateRoutes = () => {
   const { currentUser, loading } = useAuth();
@@ -10,7 +11,7 @@ const PrivateRoutes = () => {
   }, [loading]);
 
   return loading ? (
-    <h1>loading</h1>
+    <LoaderComponent />
   ) : currentUser !== null ? (
     <Outlet />
   ) : (

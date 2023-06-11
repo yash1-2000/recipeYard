@@ -19,8 +19,11 @@ export const RecipeVersionsView: FunctionComponent<{ recipeId: string }> = ({
   }, []);
   return (
     <>
-      {versions && (
+      {versions && versions.length > 0 && (
         <div>
+          <h5 className="text-xl font-bold">
+            Delicious versions of this recipe
+          </h5>
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 py-4">
             {versions.map((data, index) => (
               <VersionCardComponent data={data} key={index} />
