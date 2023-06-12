@@ -188,9 +188,10 @@ export const AddRecipeDialog: FunctionComponent<{
             <input
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
               {...register("title", {
+                required: "This field is required",
                 validate: {
                   minLength: (v) =>
-                    v.length < 1001 || "Max limit is 1000 characters",
+                    v.length < 301 || "Max limit is 300 characters",
                 },
               })}
             />
@@ -205,6 +206,7 @@ export const AddRecipeDialog: FunctionComponent<{
             <textarea
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
               {...register("description", {
+                required: "This field is required",
                 validate: {
                   minLength: (v) =>
                     v.length < 5001 || "Max limit is 5000 characters",
@@ -222,6 +224,7 @@ export const AddRecipeDialog: FunctionComponent<{
             <textarea
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
               {...register("ingredients", {
+                required: "This field is required",
                 validate: {
                   minLength: (v) =>
                     v.length < 25001 || "Max limit is 25000 characters",
@@ -237,6 +240,7 @@ export const AddRecipeDialog: FunctionComponent<{
             <textarea
               className="block w-full px-4 py-2 mb-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
               {...register("steps", {
+                required: "This field is required",
                 validate: {
                   minLength: (v) =>
                     v.length < 30001 || "Max limit is 30000 characters",

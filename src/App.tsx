@@ -29,7 +29,7 @@ function App() {
           <Route element={<RecipeViewPublic />} path="/recipe-public/:recipeId" />
           <Route
             element={<PublicRecipeListPage />}
-            path="/public-recipes-view"
+            path="/public-recipes-view/:tabNo?"
           />
         </Routes>
       </Router>

@@ -10,7 +10,7 @@ export const CardComponent: FunctionComponent<{
   return (
     <>
       <div className="inline-block p-2 text-left align-middle transition-all transform bg-white rounded-md w-full sm:p-4 my-4">
-        <Link to={`/${linkUrl}/${recipeData.id}`}>
+        <Link to={`/${linkUrl}/${recipeData.id}`} target="_blank" rel="noopener noreferrer">
           <div className="flex flex-col justify-between h-full">
             <div>
               <div

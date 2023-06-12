@@ -19,7 +19,9 @@ export const RecipeViewPublic: FunctionComponent = () => {
 
   useEffect(() => {
     getRecipeData();
+    window.scrollTo(0, 0)
   }, []);
+
   return (
     <>
       {recipe ? (

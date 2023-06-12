@@ -4,8 +4,13 @@ import { RecipeAllTab } from "../recipes-tabs/all-tab";
 import { RecipeVersionTab } from "../recipes-tabs/version-tab";
 import { useAuth } from "../../../services/auth/auth-context";
 
-export const PublicRecipeList: FunctionComponent = () => {
-  const [tabNumber, setTabNumber] = useState("0");
+export const PublicRecipeList: FunctionComponent<{ tabNo: any }> = ({
+  tabNo,
+}) => {
+  console.log(tabNo);
+  const [tabNumber, setTabNumber] = useState(
+    tabNo === undefined || tabNo > 1 ? "0" : tabNo
+  );
 
   const { currentUser } = useAuth();
 

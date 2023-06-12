@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useState, useReducer } from "react";
 import { useRecipe } from "../../services/recipes/recipe-context";
 import { useParams } from "react-router-dom";
 import RecipePostView from "../../views/recipeView/recipe-post-view";
@@ -11,6 +11,7 @@ import PostProfileView from "../../views/profileview/post-profile-view";
 import ButtonComponent from "../../components/button-component/button-component";
 
 export const RecipeViewSelf: FunctionComponent = () => {
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const [recipe, setRecipe] = useState<recipeData | null>(null);
   const [showEditRecipeDialog, setShowEditRecipeDialog] = useState(false);
   const [showCreateVersionRecipeDialog, setShowCreateVersionRecipeDialog] =
@@ -39,7 +40,11 @@ export const RecipeViewSelf: FunctionComponent = () => {
 
   useEffect(() => {
     getRecipeData();
+    window.scrollTo(0, 0);
   }, []);
+
+  useEffect(()=>{console.log('upddaattee')})
+
   return (
     <>
       {recipe ? (
@@ -76,7 +81,7 @@ export const RecipeViewSelf: FunctionComponent = () => {
               recipe={recipe}
               closeDialog={() => {
                 setShowCreateVersionRecipeDialog(false);
-                getRecipeData();
+                forceUpdate();
               }}
             />
           )}

@@ -38,7 +38,7 @@ const RecipeGallery: FunctionComponent = () => {
                 </div>
               </div>
             </div>
-            <Link to="/public-recipes-view">
+            <Link to="/public-recipes-view/0" target="_blank" rel="noopener noreferrer">
               <h6 className="flex gap-4 items-center justify-end py-4 text-lg font-bold cursor-pointer">
                 See more
                 <FiExternalLink />

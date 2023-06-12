@@ -89,12 +89,15 @@ export const RecipeDisplayDataProvider: FunctionComponent<{
 
         case recipeListType.ALL:
           const allQuery = [
-            Query.limit(50),
+            Query.limit(1),
             Query.offset(allRecipes && !isNewSearch ? allRecipes.length : 0),
             Query.search("title", allRecipesSearchTxt),
           ];
           if (allRecipesSearchTxt === "") {
             allQuery.pop();
+          }
+          if (userId == null) {
+            allQuery.push(Query.equal("isVersion", false));
           }
           result = await getAllRecipes(allQuery);
           if (result === null) return;
@@ -114,10 +117,28 @@ export const RecipeDisplayDataProvider: FunctionComponent<{
           }
           if (userId !== null) {
             versionQuery.push(Query.equal("postedBy", [userId]));
+          } else {
+            versionQuery.push(Query.limit(1));
+            versionQuery.push(
+              Query.offset(
+                versionRecipes && !isNewSearch ? versionRecipes.length : 0
+              )
+            );
           }
           result = await getAllRecipes(versionQuery);
-          setVersionRecipes(result);
-          return;
+          if (userId !== null) {
+            return setVersionRecipes(result);
+          } else {
+            if (result === null) return;
+
+            if (versionRecipes === null || isNewSearch) {
+              setVersionRecipes(result);
+              return;
+            } else {
+              setVersionRecipes((prev: any) => [...prev, ...result]);
+              return;
+            }
+          }
       }
     } catch (error) {
       console.log(error);
@@ -126,17 +147,14 @@ export const RecipeDisplayDataProvider: FunctionComponent<{
 
   useEffect(() => {
     fetchRecipes(recipeListType.SELF, true);
-    // setSelfRecipes(null);
   }, [selfRecipesSearchTxt]);
 
   useEffect(() => {
     fetchRecipes(recipeListType.ALL, true);
-    // setAllRecipes(null);
   }, [allRecipesSearchTxt]);
 
   useEffect(() => {
     fetchRecipes(recipeListType.VERSIONS, true);
-    // setVersionRecipes(null);
   }, [versionRecipesSearchTxt]);
 
   return (

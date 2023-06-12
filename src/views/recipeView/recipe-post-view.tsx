@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactElement } from "react";
+import { FunctionComponent, ReactElement, useEffect } from "react";
 import { recipeData } from "../../api/recipe-api/recipe-interface";
 import { format } from "date-fns";
 import RecipeVersionsView from "./recipe-versions-view";
@@ -7,6 +7,7 @@ import OriginalRecipeView from "./original-versions-view";
 export const RecipePostView: FunctionComponent<{ data: recipeData }> = ({
   data,
 }): ReactElement => {
+
   return (
     <>
       <article>
@@ -34,9 +35,9 @@ export const RecipePostView: FunctionComponent<{ data: recipeData }> = ({
           {data.description}
         </p>
         <h5 className="text-xl font-bold my-3">Ingredients</h5>
-        <p className="text-gray-500 whitespace-pre-wrap">{data.ingredients}</p>
+        <p className="text-lg text-gray-500 whitespace-pre-wrap">{data.ingredients}</p>
         <h5 className="text-xl font-bold my-3">Steps</h5>
-        <p className="text-gray-500 whitespace-pre-wrap">{data.steps}</p>
+        <p className="text-lg text-gray-500 whitespace-pre-wrap">{data.steps}</p>
         <br />
         <RecipeVersionsView recipeId={data.id} />
         {data.isVersion && (

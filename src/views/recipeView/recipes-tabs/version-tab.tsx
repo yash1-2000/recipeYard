@@ -5,12 +5,20 @@ import { recipeData } from "../../../api/recipe-api/recipe-interface";
 import { useRecipeDisplayData } from "../../../services/recipes/recipe-display-context";
 import LoaderComponent from "../../../components/loader-component";
 import { recipeListType } from "../hooks/use-recipes";
+import ButtonComponent from "../../../components/button-component/button-component";
+import { useMatch } from "react-router-dom";
 
 export const RecipeVersionTab: FunctionComponent<{
   linkUrl: string;
 }> = ({ linkUrl }) => {
-  const { versionRecipes, setSearchStringFun, versionRecipesSearchTxt } =
-    useRecipeDisplayData();
+  const match = useMatch("/public-recipes-view/*");
+  console.log(match);
+  const {
+    versionRecipes,
+    setSearchStringFun,
+    versionRecipesSearchTxt,
+    fetchRecipes,
+  } = useRecipeDisplayData();
 
   const getSearchStr = (str: string) => {
     setSearchStringFun(recipeListType.VERSIONS, str);
@@ -35,6 +43,19 @@ export const RecipeVersionTab: FunctionComponent<{
               ))}
             </div>
           </div>
+          <br />
+
+          {match !== null && (
+            <div className="flex justify-center my-4">
+              <ButtonComponent
+                onClick={() => fetchRecipes(recipeListType.VERSIONS)}
+              >
+                Load more
+              </ButtonComponent>
+            </div>
+          )}
+
+          <br />
         </div>
       ) : (
         <LoaderComponent />
