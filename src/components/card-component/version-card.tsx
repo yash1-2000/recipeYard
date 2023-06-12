@@ -20,7 +20,11 @@ export const VersionCardComponent: FunctionComponent<{ data: recipeData }> = ({
         <p className="text-xl font-bold text-gray-700 hover:text-gray-600 hover:underline">
           {data.title ?? ""}
         </p>
-        <p className="mt-2 text-gray-600">{data.description ?? ""}</p>
+        <p className="mt-2 text-gray-600">
+          {data.description
+            ? `${data.description.substring(250, length) + " . . ."}`
+            : ""}
+        </p>
       </div>
 
       <div className="flex items-center justify-between mt-4">

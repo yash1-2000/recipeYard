@@ -28,7 +28,9 @@ export const CardComponent: FunctionComponent<{
                   {recipeData.title ?? ""}
                 </h3>
                 <p className="mt-2 text-secondary_text">
-                  {recipeData.description ?? ""}
+                  {recipeData.description
+                    ? `${recipeData.description.substring(200, length) + " . . ."}`
+                    : ""}
                 </p>
               </div>
             </div>

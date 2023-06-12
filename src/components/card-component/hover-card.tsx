@@ -24,7 +24,11 @@ export const HoverCardComponent: FunctionComponent<{ data: recipeData }> = ({
             {data.title ?? ""}
           </h1>
           <div className="h-full w-full font-thin text-sm flex items-center justify-center p-4">
-            <p>{data.description ?? ""}</p>
+            <p>
+              {data.description
+                ? `${data.description.substring(200, length) + " . . ."}`
+                : ""}
+            </p>
           </div>
         </div>
       </div>

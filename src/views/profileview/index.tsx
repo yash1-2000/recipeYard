@@ -7,8 +7,12 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../services/auth/auth-context";
 
 function Profile() {
-  const { editProfileData, createProfileData, currentProfileData } =
-    useProfile();
+  const {
+    editProfileData,
+    createProfileData,
+    currentProfileData,
+    getCurrentProfileData,
+  } = useProfile();
   const { currentUser } = useAuth();
 
   const getProfileFormData = (): profileFormData => {
@@ -63,6 +67,7 @@ function Profile() {
       } else {
         await editProfileData(formValues);
       }
+      await getCurrentProfileData();
     }
   };
 
@@ -208,14 +213,15 @@ function Profile() {
                     </p>
                     <textarea
                       id="emailAddress"
+                      rows={7}
                       className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:outline-none"
                       {...register("about", {
                         validate: {
                           minLength: (v) => {
                             if (v === "") return true;
                             return (
-                              v.length <= 1001 ||
-                              "Name must have less than 1000 characters"
+                              v.length <= 501 ||
+                              "Name must have at most 500 characters"
                             );
                           },
                         },
