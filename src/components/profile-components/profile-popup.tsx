@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import { profileData } from "../../api/profile-api/profile-interface";
 import { format } from "date-fns";
+import defaultProfilePic from "../../../public/images/defaultavatar.png";
 
 export const ProfilePopupComponent: FunctionComponent<{
   data: profileData;
@@ -8,8 +9,10 @@ export const ProfilePopupComponent: FunctionComponent<{
   return (
     <div className="w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-lg absolute left-0">
       <div
-        className="w-full aspect-video aspect-square rounded-t-lg bg-cover bg-[red] mr-4"
-        style={{ backgroundImage: `url(${data.imageUrl})` }}
+        className="w-full aspect-video aspect-square rounded-t-lg bg-cover bg-center bg-[red] mr-4"
+        style={{
+          backgroundImage: `url(${data.imageUrl ?? defaultProfilePic})`,
+        }}
       ></div>
 
       <div className="flex items-center px-6 py-3 bg-gray-900">

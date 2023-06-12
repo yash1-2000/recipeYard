@@ -14,7 +14,7 @@ export const CardComponent: FunctionComponent<{
           <div className="flex flex-col justify-between h-full">
             <div>
               <div
-                className="flex items-center justify-center rounded-md mx-auto  shadow-xl aspect-video bg-cover"
+                className="flex items-center justify-center rounded-md mx-auto  shadow-xl aspect-video bg-cover bg-center"
                 style={{
                   backgroundImage: `url(${
                     recipeData.recipeImg ??

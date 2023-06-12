@@ -1,6 +1,7 @@
 import { useState, FunctionComponent } from "react";
 import { MdFileUpload } from "react-icons/md";
 import { deleteProfileImage, uploaProfileImage } from "../../api/storage-api";
+import defaultProfilePic from "../../../public/images/defaultavatar.png";
 
 const ProfilePicComp: FunctionComponent<{
   handleProfileSubmit: () => void;
@@ -29,9 +30,11 @@ const ProfilePicComp: FunctionComponent<{
 
   return (
     <div
-      className="shadow-xl rounded-full h-auto border-none absolute -m-16 -ml-20 lg:-ml-16 -top-5 w-3/4 aspect-square bg-cover bg-[#4b5563]"
+      className="shadow-xl rounded-full h-auto border-none absolute -m-16 -ml-20 lg:-ml-16 -top-5 w-3/4 aspect-square bg-cover bg-center bg-[#4b5563]"
       style={{
-        backgroundImage: `url(${profileImg})`,
+        backgroundImage: `url(${
+          profileImg === "" ? defaultProfilePic : profileImg
+        })`,
       }}
       onMouseEnter={() => setUploadState(true)}
       onMouseLeave={() => setUploadState(false)}

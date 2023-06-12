@@ -3,6 +3,7 @@ import { profileData } from "../../api/profile-api/profile-interface";
 import { BsInstagram } from "react-icons/bs";
 import { AiFillLinkedin, AiOutlineTwitter } from "react-icons/ai";
 import ProfilePopupComponent from "./profile-popup";
+import defaultProfilePic from "../../../public/images/defaultavatar.png";
 
 export const PostProfileComponent: FunctionComponent<{ data: profileData }> = ({
   data,
@@ -19,8 +20,10 @@ export const PostProfileComponent: FunctionComponent<{ data: profileData }> = ({
         <address className="flex items-center pb-2 not-italic">
           <div className="inline-flex items-center mr-3 text-sm text-gray-900 ">
             <div
-              className="w-16 aspect-square rounded-full bg-cover bg-[red] mr-4"
-              style={{ backgroundImage: `url(${data.imageUrl})` }}
+              className="w-16 aspect-square rounded-full bg-cover bg-center bg-[red] mr-4"
+              style={{
+                backgroundImage: `url(${data.imageUrl ?? defaultProfilePic})`,
+              }}
             ></div>
             <div>
               <a
