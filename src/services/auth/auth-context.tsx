@@ -74,7 +74,6 @@ export const AuthDataProvider: FunctionComponent<{
   };
 
   const getCurrentUserData = async (): Promise<void> => {
-    console.log("gettingCurrData");
     setLoading(true);
     const result = await checkUserSession();
     if (result.state === "failure") {

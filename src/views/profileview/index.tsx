@@ -57,7 +57,6 @@ function Profile() {
 
   const handleProfileSubmit = async () => {
     const formValues = getValues();
-    console.log(formValues);
 
     trigger();
     if (!isValid || !isDirty) {

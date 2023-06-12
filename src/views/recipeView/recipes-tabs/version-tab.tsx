@@ -12,7 +12,6 @@ export const RecipeVersionTab: FunctionComponent<{
   linkUrl: string;
 }> = ({ linkUrl }) => {
   const match = useMatch("/public-recipes-view/*");
-  console.log(match);
   const {
     versionRecipes,
     setSearchStringFun,

@@ -68,10 +68,10 @@ export const AddRecipeDialog: FunctionComponent<{
 }> = ({ closeDialog, recipe }): ReactElement => {
   const submitionStatus = useRef(false);
   const [uploadState, setUploadState] = useState(false);
-  const [files, setFiles] = useState<string[]>([]);
+  const [initialFileUrl, setInitialFileUrl] = useState<string>("");
   const { currentUser } = useAuth();
   const { addRecipe } = useRecipe();
-  const { fetchRecipes } = useRecipeDisplayData();
+
 
   const {
     register,
@@ -88,13 +88,14 @@ export const AddRecipeDialog: FunctionComponent<{
     ),
   });
 
+  const initial = getValues().recipeImg;
+
   const handleProfileSubmit = async () => {
     const formValues = getValues();
-    console.log(formValues);
 
     trigger();
     if (!isValid || !isDirty) {
-      console.log("form invalid");
+
     } else {
       await addRecipe(formValues);
       submitionStatus.current = true;
@@ -106,41 +107,35 @@ export const AddRecipeDialog: FunctionComponent<{
 
   const uploadRecipeImg = async (file: any): Promise<void> => {
     if (file === null) return;
-    const oldUrl = getValues().recipeImg.slice();
-    setFiles((a) => [...a, oldUrl]);
+    const oldUrl = getValues().recipeImg;
     const result = await uploaRecipeImage(file);
 
     if (result.state === "success") {
       if ("data" in result && result.data !== undefined) {
         setValue("recipeImg", result.data, { shouldDirty: true });
+        if (oldUrl !== initialFileUrl) {
+          deleteRecipeImage(oldUrl);
+        }
       }
     }
     return;
   };
 
   useEffect(() => {
+    setInitialFileUrl(initial);
+
     return () => {
       if (submitionStatus.current) {
-        console.log("submitted", files);
-        const aa = files;
-        console.log(aa);
-
-        aa.forEach((url: string) => {
-          deleteRecipeImage(url);
-        });
-        fetchRecipes(recipeListType.SELF);
+        if (initial !== getValues().recipeImg) {
+          deleteRecipeImage(initial);
+        }
       } else {
-        const bb = files;
-        console.log(bb);
-        bb.push(getValues().recipeImg);
-        bb.shift();
-        console.log("not submitted", bb);
-        bb.forEach((url: string) => {
-          deleteRecipeImage(url);
-        });
+        if (initial !== getValues().recipeImg) {
+          deleteRecipeImage(getValues().recipeImg);
+        }
       }
     };
-  }, [isDirty]);
+  }, []);
 
   return (
     <div

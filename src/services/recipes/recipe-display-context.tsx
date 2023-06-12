@@ -89,7 +89,7 @@ export const RecipeDisplayDataProvider: FunctionComponent<{
 
         case recipeListType.ALL:
           const allQuery = [
-            Query.limit(1),
+            Query.limit(100),
             Query.offset(allRecipes && !isNewSearch ? allRecipes.length : 0),
             Query.search("title", allRecipesSearchTxt),
           ];
@@ -118,7 +118,7 @@ export const RecipeDisplayDataProvider: FunctionComponent<{
           if (userId !== null) {
             versionQuery.push(Query.equal("postedBy", [userId]));
           } else {
-            versionQuery.push(Query.limit(1));
+            versionQuery.push(Query.limit(100));
             versionQuery.push(
               Query.offset(
                 versionRecipes && !isNewSearch ? versionRecipes.length : 0

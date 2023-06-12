@@ -113,7 +113,6 @@ const getAlertComp = (
 };
 
 const AlertComponent: FunctionComponent<alertComponentProps> = ({ toasts }) => {
-  console.log(toasts);
   return (
     <div className="fixed z-999 w-full bottom-0">
       {toasts.map((toast, _) =>

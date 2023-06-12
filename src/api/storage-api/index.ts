@@ -22,7 +22,6 @@ export const uploaProfileImage = async (
     };
   } catch (error) {
     const errorInfo = JSON.parse(JSON.stringify(error));
-    console.log(error);
     return {
       state: "failure",
       statusCode: errorInfo.response.code,
@@ -55,7 +54,6 @@ export const deleteProfileImage = async (
     };
   } catch (error) {
     const errorInfo = JSON.parse(JSON.stringify(error));
-    console.log(error);
     return {
       state: "failure",
       statusCode: errorInfo.response.code,
@@ -85,7 +83,6 @@ export const uploaRecipeImage = async (
     };
   } catch (error) {
     const errorInfo = JSON.parse(JSON.stringify(error));
-    console.log(error);
     return {
       state: "failure",
       statusCode: errorInfo.response.code,
@@ -98,10 +95,8 @@ export const uploaRecipeImage = async (
 export const deleteRecipeImage = async (
   fileURL: any
 ): Promise<responseInterface<string>> => {
-  // Define a regular expression pattern to match the fileId
   const pattern = /\/files\/([^/]+)/;
 
-  // Find the fileId using regular expression matching
   const match = fileURL.match(pattern);
 
   const fileId = match[1];
@@ -118,7 +113,6 @@ export const deleteRecipeImage = async (
     };
   } catch (error) {
     const errorInfo = JSON.parse(JSON.stringify(error));
-    console.log(error);
     return {
       state: "failure",
       statusCode: errorInfo.response.code,

@@ -109,7 +109,7 @@ export const RecipeDataProvider: FunctionComponent<{
     if (result.state === "failure") {
       addToasts(alertType.error, result.message);
     } else {
-      console.log(result);
+  
     }
   };
 

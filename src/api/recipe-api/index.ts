@@ -23,7 +23,7 @@ export const createRecipe = async (
     return {
       state: "success",
       data: responseToRecipeModel(result),
-      message: "Profile created successfully",
+      message: "Recipe created successfully",
     };
   } catch (error) {
     const errorInfo = JSON.parse(JSON.stringify(error));

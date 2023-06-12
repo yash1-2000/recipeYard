@@ -2,8 +2,18 @@ import { FunctionComponent, ReactElement, useState, memo } from "react";
 import AddRecipeDialog from "./add-recipe-dialog";
 import ButtonComponent from "../../components/button-component/button-component";
 
-export const AddRecipe: FunctionComponent = (): ReactElement => {
+export const AddRecipe: FunctionComponent<{ fetchFun?: () => void }> = ({
+  fetchFun,
+}): ReactElement => {
   const [showAddRecipe, setShowAddRecipe] = useState(false);
+
+  const closeAddDialog = () => {
+    setShowAddRecipe(false);
+    if (fetchFun) {
+      fetchFun();
+      return;
+    }
+  };
 
   return (
     <>
@@ -14,7 +24,7 @@ export const AddRecipe: FunctionComponent = (): ReactElement => {
       </div>
 
       {showAddRecipe ? (
-        <AddRecipeDialog closeDialog={() => setShowAddRecipe(false)} />
+        <AddRecipeDialog closeDialog={() => closeAddDialog()} />
       ) : null}
     </>
   );

@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactElement, useEffect } from "react";
+import { FunctionComponent, ReactElement } from "react";
 import { recipeData } from "../../api/recipe-api/recipe-interface";
 import { format } from "date-fns";
 import RecipeVersionsView from "./recipe-versions-view";

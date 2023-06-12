@@ -7,7 +7,7 @@ import { useAuth } from "../../../services/auth/auth-context";
 export const PublicRecipeList: FunctionComponent<{ tabNo: any }> = ({
   tabNo,
 }) => {
-  console.log(tabNo);
+
   const [tabNumber, setTabNumber] = useState(
     tabNo === undefined || tabNo > 1 ? "0" : tabNo
   );

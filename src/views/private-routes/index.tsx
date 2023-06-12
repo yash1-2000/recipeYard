@@ -6,10 +6,6 @@ import LoaderComponent from "../../components/loader-component";
 const PrivateRoutes = () => {
   const { currentUser, loading } = useAuth();
 
-  useEffect(() => {
-    console.log(loading);
-  }, [loading]);
-
   return loading ? (
     <LoaderComponent />
   ) : currentUser !== null ? (

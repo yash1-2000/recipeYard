@@ -4,9 +4,14 @@ import { AddRecipe } from "../add-new-recipe";
 import { RecipeSelfTab } from "../recipes-tabs/self-tab";
 import { RecipeAllTab } from "../recipes-tabs/all-tab";
 import { RecipeVersionTab } from "../recipes-tabs/version-tab";
+import {
+  recipeListType,
+  useRecipeDisplayData,
+} from "../../../services/recipes/recipe-display-context";
 
 export const PrivateRecipeList: FunctionComponent = () => {
   const [tabNumber, setTabNumber] = useState("0");
+  const { fetchRecipes } = useRecipeDisplayData();
 
   return (
     <div className="px-4">
@@ -15,7 +20,7 @@ export const PrivateRecipeList: FunctionComponent = () => {
         onChange={(val: string) => setTabNumber(val)}
         currentTabNo={tabNumber}
       />
-      <AddRecipe />
+      <AddRecipe fetchFun={() => fetchRecipes(recipeListType.SELF)} />
       <br />
 
       {tabNumber === "0" && <RecipeSelfTab linkUrl="recipe-self" />}
